@@ -64,7 +64,7 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolderDato
     public void setListSetas (ArrayList<ObjetoSetas> listSetas) {
         this.listSetas = listSetas;
     }
-    
+
     public ArrayList<ObjetoSetas> getListSetas() {
         return this.listSetas;
     }
