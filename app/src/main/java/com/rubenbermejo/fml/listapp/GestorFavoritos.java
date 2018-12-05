@@ -16,10 +16,9 @@ public class GestorFavoritos {
      *
      * @param seta
      * @param context
-     * @return
      */
 
-    public static boolean anadirAFavoritos(ObjetoSetas seta, Context context) {
+    public static void anadirAFavoritos(ObjetoSetas seta, Context context) {
 
         boolean anadido = false;
 
@@ -37,8 +36,6 @@ public class GestorFavoritos {
         } else {
             Toast.makeText(context, R.string.errorAddFav, Toast.LENGTH_SHORT).show();
         }
-
-        return anadido;
     }
 
     /**
@@ -47,10 +44,9 @@ public class GestorFavoritos {
      *
      * @param seta
      * @param context
-     * @return
      */
 
-    public static boolean eliminarDeFavoritos(ObjetoSetas seta, Context context) {
+    public static void eliminarDeFavoritos(ObjetoSetas seta, Context context) {
 
         boolean encontrado = false;
 
@@ -69,7 +65,6 @@ public class GestorFavoritos {
             Toast.makeText(context, R.string.errorRemoveFav, Toast.LENGTH_SHORT).show();
         }
 
-        return encontrado;
     }
 
 }
