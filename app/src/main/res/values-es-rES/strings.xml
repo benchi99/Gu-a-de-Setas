@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Setas</string>
+    <string name="placeHolderName">Nombre</string>
+    <string name="placeHolderCommonName">Nombre Común</string>
+    <string name="placeHolderLongDescription">Descripción Larga</string>
+    <string name="edible">Comestible</string>
+    <string name="notEdible">No Comestible</string>
+    <string name="placeHolderImageDescrpition">Imagen</string>
+    <string name="anadirSeta">Añadir seta</string>
+    <string name="filter">Filtrar por...</string>
+    <string name="showFavs">Mostrar favoritos</string>
+    <string name="showAll">Mostrar todos</string>
+    <string name="flagFav">Marcar como favorito</string>
+    <string name="unflagFav">Desmarcar como favorito</string>
+    <string name="share">Compartir</string>
+    <string name="seeOnline">Ver en la Web...</string>
+    <string name="email">Enviar por correo...</string>
+    <string name="createShroomEdibility">¿Comestible?</string>
+    <string name="cancel">Cancelar</string>
+    <string name="addFav">Añadido a favoritos</string>
+    <string name="errorAddFav">¡Ya está en favoritos!</string>
+    <string name="removeFav">Eliminado de favoritos</string>
+    <string name="errorRemoveFav">¡Esto no está marcado como favorito!</string>
+    <string name="showingFavs">Mostrando favoritos</string>
+    <string name="hidingFavs">Mostrando todos</string>
+</resources>

@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Shrooms</string>
+    <string name="placeHolderName">Name</string>
+    <string name="placeHolderCommonName">Common Name</string>
+    <string name="placeHolderLongDescription">Long Description</string>
+    <string name="edible">Edible</string>
+    <string name="notEdible">Not Edible</string>
+    <string name="placeHolderImageDescrpition">Image</string>
+    <string name="anadirSeta">Add Shroom</string>
+    <string name="filter">Filter by...</string>
+    <string name="showFavs">Show Favourites</string>
+    <string name="showAll">Show all</string>
+    <string name="flagFav">Mark as Favourite</string>
+    <string name="unflagFav">Unmark as Favourite</string>
+    <string name="share">Share</string>
+    <string name="seeOnline">Browse on the Web...</string>
+    <string name="email">Send through e-mail...</string>
+    <string name="createShroomEdibility">Edible?</string>
+    <string name="cancel">Cancel</string>
+    <string name="addFav">Added to Favourites</string>
+    <string name="errorAddFav">Its already in favourites!</string>
+    <string name="removeFav">Removed from Favourites</string>
+    <string name="errorRemoveFav">This isn\'t marked as favourite!</string>
+    <string name="showingFavs">Showing Favourites</string>
+    <string name="hidingFavs">Showing all</string>
+</resources>

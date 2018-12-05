@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:title="Añadir"
+        android:id="@+id/anadirSeta"
+        android:icon="@drawable/ic_add"
+        app:showAsAction="always"/> <!-- Si ponemos always aparecerá como opcion por separado.
+                                         Si no, aparecerá como una opción de un menú.-->
+
+    <item
+        android:title="Filtrar"
+        android:id="@+id/filter"
+        android:icon="@drawable/ic_sort"
+        app:showAsAction="always"/>
+
+    <item
+        android:title="Mostrar/Esconder favoritos"
+        android:id="@+id/toggleFav"
+        android:icon="@drawable/ic_fav_toggle"
+        app:showAsAction="always"/>
+
+
+
+</menu>
