@@ -23,4 +23,5 @@
     <string name="errorRemoveFav">This isn\'t marked as favourite!</string>
     <string name="showingFavs">Showing Favourites</string>
     <string name="hidingFavs">Showing all</string>
+    <string name="aleatorio">Random</string>
 </resources>

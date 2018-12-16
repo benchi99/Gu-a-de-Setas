@@ -9,7 +9,7 @@
     <LinearLayout
         android:id="@+id/idBack"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="210dp"
         android:orientation="horizontal"
 
         tools:layout_editor_absoluteX="97dp"
@@ -18,8 +18,8 @@
 
         <ImageView
             android:id="@+id/idImagen"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
             android:layout_marginTop="15dp"
             android:layout_marginLeft="10dp"
             android:src="@mipmap/ic_launcher" />
@@ -50,27 +50,32 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/idComest"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
                 android:text="@string/edible"
-                android:textSize="16sp"
+                android:textSize="19sp"
                 android:textStyle="bold" />
 
-        </RelativeLayout>
-    </LinearLayout>
+            <TextView
+                android:id="@+id/aleatorio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:text="@string/aleatorio"
+                android:textSize="16sp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/colorPrimary"
-        app:layout_constraintTop_toBottomOf="@+id/idBack"
-        android:layout_marginTop="11dp" />
+        </RelativeLayout>
+
+
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

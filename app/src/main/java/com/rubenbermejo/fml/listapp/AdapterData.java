@@ -33,7 +33,7 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolderDato
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderDatos viewHolderDatos, int i) {
-        viewHolderDatos.nombre.setText(listSetas.get(i).getNombre());
+        viewHolderDatos.nombre.setText(i + " - " + listSetas.get(i).getNombre());
         viewHolderDatos.informacion.setText(listSetas.get(i).getnombreComun());
         viewHolderDatos.imagen.setImageResource(listSetas.get(i).getImagen());
         if (listSetas.get(i).getComestible()) {
@@ -43,6 +43,7 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolderDato
             viewHolderDatos.comestibilidad.setText(R.string.notEdible);
             viewHolderDatos.comestibilidad.setTextColor(Color.RED);
         }
+        viewHolderDatos.aleatorio.setText(String.valueOf(listSetas.get(i).getAleatorio()));
     }
 
     @Override
@@ -72,7 +73,7 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolderDato
     public class ViewHolderDatos extends RecyclerView.ViewHolder {
 
         LinearLayout background;
-        TextView nombre, informacion, comestibilidad;
+        TextView nombre, informacion, comestibilidad, aleatorio;
         ImageView imagen;
 
         public ViewHolderDatos(@NonNull View itemView) {
@@ -82,6 +83,7 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolderDato
             imagen = itemView.findViewById(R.id.idImagen);
             comestibilidad = itemView.findViewById(R.id.idComest);
             background = itemView.findViewById(R.id.idBack);
+            aleatorio = itemView.findViewById(R.id.aleatorio);
         }
 
     }

@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
         switch(requestCode) {
 
-            /**
+            /*
              * NO ACTUALIZA BIEN EL OBJETO EN EL ARRAYLIST PRINCIPAL.
              */
 

@@ -24,4 +24,5 @@
     <string name="errorRemoveFav">¡Esto no está marcado como favorito!</string>
     <string name="showingFavs">Mostrando favoritos</string>
     <string name="hidingFavs">Mostrando todos</string>
+    <string name="aleatorio">Aleatorio</string>
 </resources>

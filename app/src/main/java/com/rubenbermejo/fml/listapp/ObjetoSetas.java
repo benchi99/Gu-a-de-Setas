@@ -1,12 +1,13 @@
 package com.rubenbermejo.fml.listapp;
 
 import java.io.Serializable;
+import java.util.Random;
 
 public class ObjetoSetas implements Serializable {
 
     private String nombre, descripcion, nombreComun, URLlinea;
     private boolean Comestible, favorito;
-    private int imagen;
+    private int imagen, aleatorio;
 
     public ObjetoSetas(String nombre, String descripcion, String nombreComun, String URLlinea, boolean Comestible, int imagen) {
         this.nombre = nombre;
@@ -16,6 +17,8 @@ public class ObjetoSetas implements Serializable {
         this.Comestible = Comestible;
         this.imagen = imagen;
         this.favorito = false;
+
+        this.aleatorio = 1000 + new Random().nextInt(9999);
     }
 
     public String getNombre() {
@@ -67,6 +70,8 @@ public class ObjetoSetas implements Serializable {
     }
 
     public boolean getFavorito() { return favorito; }
+
+    public int getAleatorio() { return this.aleatorio; }
 
     public void setFavorito(boolean favorito) { this.favorito = favorito; }
 
