@@ -7,7 +7,7 @@ public class ObjetoSetas implements Serializable {
 
     private String nombre, descripcion, nombreComun, URLlinea;
     private boolean Comestible, favorito;
-    private int imagen, aleatorio;
+    private int imagen;
 
     public ObjetoSetas(String nombre, String descripcion, String nombreComun, String URLlinea, boolean Comestible, int imagen) {
         this.nombre = nombre;
@@ -17,8 +17,6 @@ public class ObjetoSetas implements Serializable {
         this.Comestible = Comestible;
         this.imagen = imagen;
         this.favorito = false;
-
-        this.aleatorio = 1000 + new Random().nextInt(9999);
     }
 
     public String getNombre() {
@@ -70,8 +68,6 @@ public class ObjetoSetas implements Serializable {
     }
 
     public boolean getFavorito() { return favorito; }
-
-    public int getAleatorio() { return this.aleatorio; }
 
     public void setFavorito(boolean favorito) { this.favorito = favorito; }
 

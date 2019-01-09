@@ -43,7 +43,6 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolderDato
             viewHolderDatos.comestibilidad.setText(R.string.notEdible);
             viewHolderDatos.comestibilidad.setTextColor(Color.RED);
         }
-        viewHolderDatos.aleatorio.setText(String.valueOf(listSetas.get(i).getAleatorio()));
     }
 
     @Override
