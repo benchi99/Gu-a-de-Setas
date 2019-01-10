@@ -46,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        SetasSQLiteHelper con = new SetasSQLiteHelper(this, "Setas", null, 1);
+
         lista.setAdapter(adaptador);
     }
 
