@@ -1,7 +1,6 @@
 package com.rubenbermejo.fml.listapp;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class CamaraDatos {
 

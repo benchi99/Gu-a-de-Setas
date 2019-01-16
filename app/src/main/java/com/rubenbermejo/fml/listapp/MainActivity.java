@@ -2,6 +2,7 @@ package com.rubenbermejo.fml.listapp;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import static com.rubenbermejo.fml.listapp.CamaraDatos.*;
 import static com.rubenbermejo.fml.listapp.CamaraDatos.inicializarDatos;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
         lista = findViewById(R.id.lista);
         lista.setLayoutManager(new LinearLayoutManager(this));
-        inicializarDatos();
+        CamaraDatos.inicializarDatos();
         adaptador = new AdapterData(CamaraDatos.listDatos);
 
         adaptador.setOnClickListener(new View.OnClickListener() {
