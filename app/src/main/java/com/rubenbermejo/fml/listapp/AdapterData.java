@@ -82,7 +82,6 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolderDato
             imagen = itemView.findViewById(R.id.idImagen);
             comestibilidad = itemView.findViewById(R.id.idComest);
             background = itemView.findViewById(R.id.idBack);
-            aleatorio = itemView.findViewById(R.id.aleatorio);
         }
 
     }
