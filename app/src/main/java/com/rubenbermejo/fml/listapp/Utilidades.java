@@ -30,7 +30,7 @@ public class Utilidades {
     final public static String FAV_COLUMNA = "favorito";
     final public static String IMG_COLUMNA = "imagen";
 
-    public void rellenaBaseDeDatos(SQLiteDatabase bd, Context context) {
+    public static void rellenaBaseDeDatos(SQLiteDatabase bd, Context context) {
         ContentValues cvs = null;
         for (int i = 0; i < listDatos.size(); i++) {
             cvs = new ContentValues();
@@ -46,18 +46,18 @@ public class Utilidades {
         }
     }
 
-    public Bitmap resToBmp(Context context, int id) {
+    public static Bitmap resToBmp(Context context, int id) {
         return BitmapFactory.decodeResource(context.getResources(), id);
     }
 
-    public byte[] convertirImagenABytes(Bitmap bmp) {
+    public static byte[] convertirImagenABytes(Bitmap bmp) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream(175000);
         bmp.compress(Bitmap.CompressFormat.PNG, 0, baos);
         byte[] blob = baos.toByteArray();
         return blob;
     }
 
-    public Bitmap convertirBytesAImagen(byte[] blob) {
+    public static Bitmap convertirBytesAImagen(byte[] blob) {
         Bitmap bmp = null;
         ByteArrayInputStream bais = new ByteArrayInputStream(blob);
         bmp = BitmapFactory.decodeStream(bais);
