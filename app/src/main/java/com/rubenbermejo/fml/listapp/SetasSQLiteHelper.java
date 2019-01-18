@@ -29,7 +29,7 @@ public class SetasSQLiteHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         //Se crea la tabla en la primera instalación.
         db.execSQL(sql);
-        //Utilidades.rellenaBaseDeDatos(db, this);
+        Utilidades.rellenaBaseDeDatos(db);
     }
 
     @Override

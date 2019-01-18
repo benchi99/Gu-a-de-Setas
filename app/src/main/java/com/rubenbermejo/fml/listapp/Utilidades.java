@@ -30,7 +30,7 @@ public class Utilidades {
     final public static String FAV_COLUMNA = "favorito";
     final public static String IMG_COLUMNA = "imagen";
 
-    public static void rellenaBaseDeDatos(SQLiteDatabase bd, Context context) {
+    public static void rellenaBaseDeDatos(SQLiteDatabase bd) {
         ContentValues cvs = null;
         for (int i = 0; i < listDatos.size(); i++) {
             cvs = new ContentValues();
@@ -40,14 +40,10 @@ public class Utilidades {
             cvs.put(URLLINEA_COLUMNA, listDatos.get(i).getURLlinea());
             cvs.put(COMESTIBLE_COLUMNA, listDatos.get(i).getComestible());
             cvs.put(FAV_COLUMNA, listDatos.get(i).getFavorito());
-            cvs.put(IMG_COLUMNA, convertirImagenABytes(resToBmp(context, listDatos.get(i).getImagen())));
+            cvs.put(IMG_COLUMNA, convertirImagenABytes(MainActivity.getBmpFromList(i)));
 
             bd.insert(NOMBRE_TABLA, ID_COLUMNA, cvs);
         }
-    }
-
-    public static Bitmap resToBmp(Context context, int id) {
-        return BitmapFactory.decodeResource(context.getResources(), id);
     }
 
     public static byte[] convertirImagenABytes(Bitmap bmp) {

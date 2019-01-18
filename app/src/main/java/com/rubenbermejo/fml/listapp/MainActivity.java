@@ -1,8 +1,10 @@
 package com.rubenbermejo.fml.listapp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +21,8 @@ import static com.rubenbermejo.fml.listapp.CamaraDatos.*;
 import static com.rubenbermejo.fml.listapp.CamaraDatos.inicializarDatos;
 
 public class MainActivity extends AppCompatActivity {
+
+    static ArrayList<Bitmap> bmps;
 
     RecyclerView lista;
     AdapterData adaptador;
@@ -138,4 +142,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+    private void addBmpsToList(){
+        for (int i = 0; i < CamaraDatos.listDatos.size(); i++){
+            bmps.add(BitmapFactory.decodeResource(this.getApplicationContext().getResources(), i));
+        }
+    }
+
+    public static Bitmap getBmpFromList(int i){
+        return bmps.get(i);
+    }
+
+
 }
