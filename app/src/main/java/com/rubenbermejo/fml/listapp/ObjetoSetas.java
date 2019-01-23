@@ -7,9 +7,9 @@ public class ObjetoSetas implements Serializable {
 
     private String nombre, descripcion, nombreComun, URLlinea;
     private boolean Comestible, favorito;
-    private int imagen;
+    private int id, imagen;
 
-    public ObjetoSetas(String nombre, String descripcion, String nombreComun, String URLlinea, boolean Comestible, int imagen) {
+    public ObjetoSetas( String nombre, String descripcion, String nombreComun, String URLlinea, boolean Comestible, int imagen) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.nombreComun = nombreComun;
@@ -18,6 +18,10 @@ public class ObjetoSetas implements Serializable {
         this.imagen = imagen;
         this.favorito = false;
     }
+
+    public int getId() { return id; }
+
+    public void setId(int id) { this.id = id; }
 
     public String getNombre() {
         return nombre;

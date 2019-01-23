@@ -36,7 +36,6 @@ public class nuevaSeta extends AppCompatActivity {
 
         customizaActionBar();
 
-        //Se asegura que
         imgvw.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

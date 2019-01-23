@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     RecyclerView lista;
     AdapterData adaptador;
+    SetasSQLiteHelper con;
     boolean mostrarFavoritos = false;
 
     @Override
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        SetasSQLiteHelper con = new SetasSQLiteHelper(this, "Setas", null, 1);
+        con = new SetasSQLiteHelper(this, "Setas", null, Utilidades.VERSION);
 
         lista.setAdapter(adaptador);
     }

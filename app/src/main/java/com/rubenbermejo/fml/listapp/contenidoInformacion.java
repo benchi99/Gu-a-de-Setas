@@ -2,7 +2,9 @@ package com.rubenbermejo.fml.listapp;
 
 import android.app.Activity;
 import android.content.ClipData;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.annotation.MenuRes;
@@ -22,6 +24,7 @@ public class contenidoInformacion extends AppCompatActivity {
     ImageView imageView;
     ObjetoSetas setaRecibida;
     MenuItem togglerFav;
+    SetasSQLiteHelper con;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,8 @@ public class contenidoInformacion extends AppCompatActivity {
         tvDescripcion = findViewById(R.id.tvDescripcion);
         tvNombreComun = findViewById(R.id.tvNombreComun);
         imageView = findViewById(R.id.imageView);
+
+        con = con = new SetasSQLiteHelper(this, "Setas", null, Utilidades.VERSION);
 
         Bundle informacionRecibida = getIntent().getExtras();
 
@@ -87,11 +92,20 @@ public class contenidoInformacion extends AppCompatActivity {
         switch (id) {
 
             case R.id.togglerFav:
-
+                SQLiteDatabase db = con.getWritableDatabase();
+                String[] param = { String.valueOf(setaRecibida.getId()) };
+                ContentValues cv = new ContentValues();
                 if (!setaRecibida.getFavorito()) {
-                    GestorFavoritos.anadirAFavoritos(setaRecibida, getApplicationContext());
+                    cv.put(Utilidades.FAV_COLUMNA, true);
+                    Toast.makeText(this, "Añadido a favoritos.", Toast.LENGTH_SHORT).show();
                 } else if (setaRecibida.getFavorito()){
-                    GestorFavoritos.eliminarDeFavoritos(setaRecibida, getApplicationContext());
+                    cv.put(Utilidades.FAV_COLUMNA, false);
+                    Toast.makeText(this, "Eliminado de favoritos.", Toast.LENGTH_SHORT).show();
+                }
+                try {
+                    db.update(Utilidades.NOMBRE_TABLA, cv, Utilidades.ID_COLUMNA + " = ?", param);
+                } catch (Exception e) {
+                    Toast.makeText(this, "No se ha podido actualizar la tabla...", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.share:
@@ -121,7 +135,6 @@ public class contenidoInformacion extends AppCompatActivity {
     }
 
     /**
-     *
      * Establece el título de la seta escogida en el Action Bar.
      *
      * @param tituloActividad
