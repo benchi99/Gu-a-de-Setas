@@ -1,5 +1,7 @@
 package com.rubenbermejo.fml.listapp;
 
+import android.graphics.Bitmap;
+
 import java.io.Serializable;
 import java.util.Random;
 
@@ -7,9 +9,10 @@ public class ObjetoSetas implements Serializable {
 
     private String nombre, descripcion, nombreComun, URLlinea;
     private boolean Comestible, favorito;
-    private int id, imagen;
+    private int id;
+    private Bitmap imagen;
 
-    public ObjetoSetas( String nombre, String descripcion, String nombreComun, String URLlinea, boolean Comestible, int imagen) {
+    public ObjetoSetas(String nombre, String descripcion, String nombreComun, String URLlinea, boolean Comestible, Bitmap imagen) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.nombreComun = nombreComun;
@@ -63,11 +66,11 @@ public class ObjetoSetas implements Serializable {
         this.Comestible = Comestible;
     }
 
-    public int getImagen() {
+    public Bitmap getImagen() {
         return imagen;
     }
 
-    public void setImagen(int imagen) {
+    public void setImagen(Bitmap imagen) {
         this.imagen = imagen;
     }
 

@@ -71,13 +71,6 @@ public class contenidoInformacion extends AppCompatActivity {
         finish();
     }
 
-    public void pulsarCambiarNombre(View v) {
-
-        setaRecibida.setNombre("Pulsado botón");
-
-    }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_contenidoinformacion_activity, menu);
@@ -96,9 +89,11 @@ public class contenidoInformacion extends AppCompatActivity {
                 String[] param = { String.valueOf(setaRecibida.getId()) };
                 ContentValues cv = new ContentValues();
                 if (!setaRecibida.getFavorito()) {
+                    setaRecibida.setFavorito(true);
                     cv.put(Utilidades.FAV_COLUMNA, true);
                     Toast.makeText(this, "Añadido a favoritos.", Toast.LENGTH_SHORT).show();
                 } else if (setaRecibida.getFavorito()){
+                    setaRecibida.setFavorito(false);
                     cv.put(Utilidades.FAV_COLUMNA, false);
                     Toast.makeText(this, "Eliminado de favoritos.", Toast.LENGTH_SHORT).show();
                 }

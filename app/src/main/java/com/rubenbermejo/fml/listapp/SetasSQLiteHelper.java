@@ -9,14 +9,14 @@ public class SetasSQLiteHelper extends SQLiteOpenHelper {
     /*
     TABLA SETAS:
     COLUMNAS:
-    1. ID - INTEGER <- PRIMARY KEY AUTOINCREMENTADO
-    2. NOMBRE - TEXT
-    3. DESCRIPCION - TEXT
-    4. NOMBE COMÚN - TEXT
-    5. URL - TEXT
-    6. COMESTIBLE - BOOLEAN
-    7. FAVORITO - BOOLEAN
-    8. IMAGEN - BLOB
+    0. ID - INTEGER <- PRIMARY KEY AUTOINCREMENTADO
+    1. NOMBRE - TEXT
+    2. DESCRIPCION - TEXT
+    3. NOMBE COMÚN - TEXT
+    4. URL - TEXT
+    5. COMESTIBLE - BOOLEAN
+    6. FAVORITO - BOOLEAN
+    7. IMAGEN - BLOB <- NULL
      */
 
     String sql = "CREATE TABLE " + Utilidades.NOMBRE_TABLA + "( " + Utilidades.ID_COLUMNA +"  INTEGER PRIMARY KEY AUTOINCREMENT, " + Utilidades.NOMBRE_COLUMNA + " TEXT, " + Utilidades.DESCRIPCION_COLUMNA + " TEXT, " + Utilidades.NOMBRECOMUN_COLUMNA + " TEXT, " + Utilidades.URLLINEA_COLUMNA + " TEXT, " + Utilidades.COMESTIBLE_COLUMNA + " BOOLEAN, " + Utilidades.FAV_COLUMNA + " BOOLEAN, " + Utilidades.IMG_COLUMNA + " BLOB)";

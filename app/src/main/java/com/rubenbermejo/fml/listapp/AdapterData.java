@@ -33,9 +33,9 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolderDato
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderDatos viewHolderDatos, int i) {
-        viewHolderDatos.nombre.setText(i + " - " + listSetas.get(i).getNombre());
+        viewHolderDatos.nombre.setText(listSetas.get(i).getNombre());
         viewHolderDatos.informacion.setText(listSetas.get(i).getnombreComun());
-        viewHolderDatos.imagen.setImageResource(listSetas.get(i).getImagen());
+        viewHolderDatos.imagen.setImageBitmap(listSetas.get(i).getImagen());
         if (listSetas.get(i).getComestible()) {
             viewHolderDatos.comestibilidad.setText(R.string.edible);
             viewHolderDatos.comestibilidad.setTextColor(Color.GREEN);
@@ -72,7 +72,7 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolderDato
     public class ViewHolderDatos extends RecyclerView.ViewHolder {
 
         LinearLayout background;
-        TextView nombre, informacion, comestibilidad, aleatorio;
+        TextView nombre, informacion, comestibilidad;
         ImageView imagen;
 
         public ViewHolderDatos(@NonNull View itemView) {

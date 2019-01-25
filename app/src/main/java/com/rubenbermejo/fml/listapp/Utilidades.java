@@ -2,6 +2,7 @@ package com.rubenbermejo.fml.listapp;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,6 +10,7 @@ import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 
 import static com.rubenbermejo.fml.listapp.CamaraDatos.listDatos;
 
@@ -44,6 +46,23 @@ public class Utilidades {
 
             bd.insert(NOMBRE_TABLA, ID_COLUMNA, cvs);
         }
+    }
+
+    public ArrayList<ObjetoSetas> obtenerListaMasReciente(SetasSQLiteHelper con) {
+
+        SQLiteDatabase db = con.getReadableDatabase();
+
+        ObjetoSetas seta = null;
+        Cursor c = db.rawQuery("SELECT * FROM " + NOMBRE_TABLA, null);
+
+        while (c.moveToNext()) {
+            //seta = new ObjetoSetas();
+
+
+        }
+
+
+        return null;
     }
 
     public static byte[] convertirImagenABytes(Bitmap bmp) {

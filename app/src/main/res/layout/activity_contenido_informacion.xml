@@ -60,27 +60,6 @@
             app:layout_constraintBottom_toTopOf="@+id/tvNombre"
             app:layout_constraintStart_toEndOf="@+id/imageView" />
 
-        <Button
-            android:id="@+id/botonPulsar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="56dp"
-            android:layout_marginEnd="16dp"
-            android:onClick="pulsarCambiarNombre"
-            android:text="pulsar RW"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvComestibilidad" />
-
-        <TextView
-            android:id="@+id/pos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:textSize="24dp"
-            android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@+id/tvComestibilidad" />
     </android.support.constraint.ConstraintLayout>
 
 

@@ -23,7 +23,6 @@ import static com.rubenbermejo.fml.listapp.CamaraDatos.inicializarDatos;
 public class MainActivity extends AppCompatActivity {
 
     static ArrayList<Bitmap> bmps;
-
     RecyclerView lista;
     AdapterData adaptador;
     SetasSQLiteHelper con;
@@ -37,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
         lista = findViewById(R.id.lista);
         lista.setLayoutManager(new LinearLayoutManager(this));
         CamaraDatos.inicializarDatos();
+        bmps = new ArrayList<>();
+        addBmpsToList();
         adaptador = new AdapterData(CamaraDatos.listDatos);
 
         adaptador.setOnClickListener(new View.OnClickListener() {
@@ -146,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void addBmpsToList(){
         for (int i = 0; i < CamaraDatos.listDatos.size(); i++){
-            bmps.add(BitmapFactory.decodeResource(this.getApplicationContext().getResources(), i));
+            bmps.add(BitmapFactory.decodeResource(getApplicationContext().getResources(), listDatos.get(i).getImagen()));
         }
     }
 
