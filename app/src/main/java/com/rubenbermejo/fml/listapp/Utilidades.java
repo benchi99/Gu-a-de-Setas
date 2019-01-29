@@ -42,27 +42,35 @@ public class Utilidades {
             cvs.put(URLLINEA_COLUMNA, listDatos.get(i).getURLlinea());
             cvs.put(COMESTIBLE_COLUMNA, listDatos.get(i).getComestible());
             cvs.put(FAV_COLUMNA, listDatos.get(i).getFavorito());
-            cvs.put(IMG_COLUMNA, convertirImagenABytes(MainActivity.getBmpFromList(i)));
+            cvs.put(IMG_COLUMNA, convertirImagenABytes(listDatos.get(i).getImagen()));
 
             bd.insert(NOMBRE_TABLA, ID_COLUMNA, cvs);
         }
     }
 
-    public ArrayList<ObjetoSetas> obtenerListaMasReciente(SetasSQLiteHelper con) {
+    public static ArrayList<ObjetoSetas> obtenerListaMasReciente(SetasSQLiteHelper con, String param) {
 
         SQLiteDatabase db = con.getReadableDatabase();
+        Cursor c = null;
 
-        ObjetoSetas seta = null;
-        Cursor c = db.rawQuery("SELECT * FROM " + NOMBRE_TABLA, null);
+        String[] whereParams = {Utilidades.FAV_COLUMNA + " = true"};
 
-        while (c.moveToNext()) {
-            //seta = new ObjetoSetas();
-
-
+        if (param.equals("normal")) {
+            c = db.rawQuery("SELECT * FROM " + NOMBRE_TABLA, null);
+        } else if (param.equals("favorito")){
+            c = db.rawQuery("SELECT * FROM " + NOMBRE_TABLA, whereParams);
         }
 
+        ArrayList<ObjetoSetas> listActual = new ArrayList<>();
+        ObjetoSetas seta = null;
 
-        return null;
+
+        while (c.moveToNext()) {
+            seta = new ObjetoSetas(c.getString(1), c.getString(2), c.getString(3), c.getString(4), Boolean.parseBoolean(c.getString(5)), convertirBytesAImagen(c.getBlob(7)));
+            listActual.add(seta);
+        }
+
+        return listActual;
     }
 
     public static byte[] convertirImagenABytes(Bitmap bmp) {

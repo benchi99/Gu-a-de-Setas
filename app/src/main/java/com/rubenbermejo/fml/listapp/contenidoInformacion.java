@@ -54,7 +54,7 @@ public class contenidoInformacion extends AppCompatActivity {
                 tvComestibilidad.setText(R.string.notEdible);
                 tvComestibilidad.setTextColor(Color.RED);
             }
-            imageView.setImageResource(setaRecibida.getImagen());
+            imageView.setImageBitmap(setaRecibida.getImagen());
         }
 
         customizaActionBar(setaRecibida.getNombre());

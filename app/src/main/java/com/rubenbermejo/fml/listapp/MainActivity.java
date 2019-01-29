@@ -22,7 +22,6 @@ import static com.rubenbermejo.fml.listapp.CamaraDatos.inicializarDatos;
 
 public class MainActivity extends AppCompatActivity {
 
-    static ArrayList<Bitmap> bmps;
     RecyclerView lista;
     AdapterData adaptador;
     SetasSQLiteHelper con;
@@ -36,9 +35,7 @@ public class MainActivity extends AppCompatActivity {
         lista = findViewById(R.id.lista);
         lista.setLayoutManager(new LinearLayoutManager(this));
         CamaraDatos.inicializarDatos();
-        bmps = new ArrayList<>();
-        addBmpsToList();
-        adaptador = new AdapterData(CamaraDatos.listDatos);
+        adaptador = new AdapterData(Utilidades.obtenerListaMasReciente(con, con.NORMAL));
 
         adaptador.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,13 +81,12 @@ public class MainActivity extends AppCompatActivity {
 
                 if (!mostrarFavoritos) {
                     Toast.makeText(this, R.string.showingFavs, Toast.LENGTH_SHORT).show();
-                    ArrayList<ObjetoSetas> nuevo = new ArrayList<>();
+                    ArrayList<ObjetoSetas> nuevo = Utilidades.obtenerListaMasReciente(con, con.FAVORITOS);
                     adaptador.setListSetas(nuevo);
-                    nuevo.addAll(GestorFavoritos.listaFavoritos);
                     adaptador.notifyDataSetChanged();
                 } else {
                     Toast.makeText(this, R.string.hidingFavs, Toast.LENGTH_SHORT).show();
-                    adaptador.setListSetas(CamaraDatos.listDatos);
+                    adaptador.setListSetas(Utilidades.obtenerListaMasReciente(con, con.NORMAL));
                     adaptador.notifyDataSetChanged();
                 }
 
@@ -144,16 +140,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
-    private void addBmpsToList(){
-        for (int i = 0; i < CamaraDatos.listDatos.size(); i++){
-            bmps.add(BitmapFactory.decodeResource(getApplicationContext().getResources(), listDatos.get(i).getImagen()));
-        }
-    }
-
-    public static Bitmap getBmpFromList(int i){
-        return bmps.get(i);
-    }
-
 
 }
