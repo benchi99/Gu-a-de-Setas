@@ -80,7 +80,7 @@ public class Utilidades {
 
     public static byte[] convertirImagenABytes(Bitmap bmp) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream(175000);
-        bmp.compress(Bitmap.CompressFormat.JPEG, 0, baos);
+        bmp.compress(Bitmap.CompressFormat.PNG, 0, baos);
         byte[] blob = baos.toByteArray();
         return blob;
     }
