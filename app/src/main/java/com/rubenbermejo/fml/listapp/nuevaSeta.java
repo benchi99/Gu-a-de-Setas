@@ -1,7 +1,10 @@
 package com.rubenbermejo.fml.listapp;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -22,12 +25,15 @@ public class nuevaSeta extends AppCompatActivity {
     ImageView imgvw;
     EditText etNombre, etNombreComun, etDescripcion;
     Switch edibleSwitch;
+    SetasSQLiteHelper con;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nueva_seta);
 
+        con = new SetasSQLiteHelper(this, "Setas", null, Utilidades.VERSION);
+        
         imgvw = findViewById(R.id.imageViewAdd);
         etNombre = findViewById(R.id.etNombre);
         etNombreComun = findViewById(R.id.edNombreComun);
@@ -68,9 +74,8 @@ public class nuevaSeta extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        Intent intentDevolver = new Intent();
-        Bundle bundleDevolver = new Bundle();
-
+        SQLiteDatabase bd = con.getWritableDatabase();
+        
         int id = item.getItemId();
 
         switch (id) {
@@ -78,9 +83,22 @@ public class nuevaSeta extends AppCompatActivity {
             case R.id.aceptarCrearSeta:
                 //La imagen realmente no se pone, da igual qué selecciones ya que no he conseguido
                 //poder realmente pasarle la imagen a mi objeto.
-                bundleDevolver.putSerializable("nuevaSeta", new ObjetoSetas(etNombre.getText().toString(), etDescripcion.getText().toString(), etNombreComun.getText().toString(), null, edibleSwitch.isChecked(), R.drawable.dano128px));
-                intentDevolver.putExtras(bundleDevolver);
-                setResult(Activity.RESULT_OK, intentDevolver);
+                ContentValues cv = new ContentValues();
+                
+                cv.put(Utilidades.NOMBRE_COLUMNA, etNombre.getText().toString());
+                cv.put(Utilidades.DESCRIPCION_COLUMNA, etDescripcion.getText().toString());
+                cv.put(Utilidades.NOMBRECOMUN_COLUMNA, etNombreComun.getText().toString());
+                cv.put(Utilidades.URLLINEA_COLUMNA, "");
+                cv.put(Utilidades.COMESTIBLE_COLUMNA, edibleSwitch.isChecked());
+                cv.put(Utilidades.IMG_COLUMNA, Utilidades.convertirImagenABytes(BitmapFactory.decodeResource(getResources(), R.drawable.dano128px)));
+                
+                try {
+                    bd.insert(Utilidades.NOMBRE_TABLA, null, cv);
+                } catch (Exception e) {
+                    Toast.makeText(this, "Error al insertar en la BD...", Toast.LENGTH_SHORT).show();
+                }
+
+                setResult(Activity.RESULT_OK);
                 finish();
                 break;
             case R.id.cancelarCrearSeta:
@@ -88,7 +106,6 @@ public class nuevaSeta extends AppCompatActivity {
                 finish();
                 break;
         }
-
 
         return super.onOptionsItemSelected(item);
     }

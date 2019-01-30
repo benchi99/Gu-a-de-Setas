@@ -17,7 +17,6 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolderDato
     ArrayList<ObjetoSetas> listSetas;
     private View.OnClickListener listener;
 
-
     public AdapterData(ArrayList<ObjetoSetas> listDatos) {
         this.listSetas = listDatos;
     }
@@ -35,7 +34,7 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolderDato
     public void onBindViewHolder(@NonNull ViewHolderDatos viewHolderDatos, int i) {
         viewHolderDatos.nombre.setText(listSetas.get(i).getNombre());
         viewHolderDatos.informacion.setText(listSetas.get(i).getnombreComun());
-        viewHolderDatos.imagen.setImageBitmap(listSetas.get(i).getImagen());
+        viewHolderDatos.imagen.setImageBitmap(Utilidades.convertirBytesAImagen(listSetas.get(i).getImagen()));
         if (listSetas.get(i).getComestible()) {
             viewHolderDatos.comestibilidad.setText(R.string.edible);
             viewHolderDatos.comestibilidad.setTextColor(Color.GREEN);
@@ -71,7 +70,7 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolderDato
 
     public class ViewHolderDatos extends RecyclerView.ViewHolder {
 
-        LinearLayout background;
+
         TextView nombre, informacion, comestibilidad;
         ImageView imagen;
 
@@ -81,7 +80,6 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolderDato
             informacion = itemView.findViewById(R.id.idInfo);
             imagen = itemView.findViewById(R.id.idImagen);
             comestibilidad = itemView.findViewById(R.id.idComest);
-            background = itemView.findViewById(R.id.idBack);
         }
 
     }

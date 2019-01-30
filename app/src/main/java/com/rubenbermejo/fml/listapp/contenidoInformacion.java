@@ -23,7 +23,6 @@ public class contenidoInformacion extends AppCompatActivity {
     TextView tvNombre, tvComestibilidad, tvDescripcion, tvNombreComun;
     ImageView imageView;
     ObjetoSetas setaRecibida;
-    MenuItem togglerFav;
     SetasSQLiteHelper con;
 
     @Override
@@ -37,7 +36,7 @@ public class contenidoInformacion extends AppCompatActivity {
         tvNombreComun = findViewById(R.id.tvNombreComun);
         imageView = findViewById(R.id.imageView);
 
-        con = con = new SetasSQLiteHelper(this, "Setas", null, Utilidades.VERSION);
+        con = new SetasSQLiteHelper(this, "Setas", null, Utilidades.VERSION);
 
         Bundle informacionRecibida = getIntent().getExtras();
 
@@ -54,7 +53,7 @@ public class contenidoInformacion extends AppCompatActivity {
                 tvComestibilidad.setText(R.string.notEdible);
                 tvComestibilidad.setTextColor(Color.RED);
             }
-            imageView.setImageBitmap(setaRecibida.getImagen());
+            imageView.setImageBitmap(Utilidades.convertirBytesAImagen(setaRecibida.getImagen()));
         }
 
         customizaActionBar(setaRecibida.getNombre());
@@ -97,6 +96,7 @@ public class contenidoInformacion extends AppCompatActivity {
                     cv.put(Utilidades.FAV_COLUMNA, false);
                     Toast.makeText(this, "Eliminado de favoritos.", Toast.LENGTH_SHORT).show();
                 }
+
                 try {
                     db.update(Utilidades.NOMBRE_TABLA, cv, Utilidades.ID_COLUMNA + " = ?", param);
                 } catch (Exception e) {

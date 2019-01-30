@@ -17,8 +17,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import static com.rubenbermejo.fml.listapp.CamaraDatos.*;
-import static com.rubenbermejo.fml.listapp.CamaraDatos.inicializarDatos;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,9 +30,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        con = new SetasSQLiteHelper(this, "Setas", null, Utilidades.VERSION);
+
         lista = findViewById(R.id.lista);
         lista.setLayoutManager(new LinearLayoutManager(this));
-        CamaraDatos.inicializarDatos();
         adaptador = new AdapterData(Utilidades.obtenerListaMasReciente(con, con.NORMAL));
 
         adaptador.setOnClickListener(new View.OnClickListener() {
@@ -47,11 +46,10 @@ public class MainActivity extends AppCompatActivity {
                 informacion.putSerializable("seta", seta);
                 intent.putExtras(informacion);
 
-                startActivityForResult(intent, 1);
+                startActivity(intent);
             }
         });
 
-        con = new SetasSQLiteHelper(this, "Setas", null, Utilidades.VERSION);
 
         lista.setAdapter(adaptador);
     }
@@ -78,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, R.string.filter, Toast.LENGTH_SHORT).show();
                 break;
             case R.id.toggleFav:
-
                 if (!mostrarFavoritos) {
                     Toast.makeText(this, R.string.showingFavs, Toast.LENGTH_SHORT).show();
                     ArrayList<ObjetoSetas> nuevo = Utilidades.obtenerListaMasReciente(con, con.FAVORITOS);
@@ -91,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 mostrarFavoritos = !mostrarFavoritos;
-
                 break;
         }
 
@@ -102,33 +98,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
         switch(requestCode) {
-
-            /*
-             * NO ACTUALIZA BIEN EL OBJETO EN EL ARRAYLIST PRINCIPAL.
-             */
-
-            case 1:     //Devuelve objeto de Seta para ver si se ha añadido a favoritos o no.
+            case 2:     //Actualiza la lista.
                 if (resultCode == Activity.RESULT_OK) {
-                    ObjetoSetas setaActualizada = (ObjetoSetas) data.getSerializableExtra("devolverSeta");
-                    for (int i = 0; i < CamaraDatos.listDatos.size(); i++) {
-                        if (CamaraDatos.listDatos.get(i).getNombre() == setaActualizada.getNombre()){
-                            CamaraDatos.listDatos.remove(i);
-                            CamaraDatos.listDatos.add(i, setaActualizada);
-                            adaptador.notifyItemInserted(i);
-                        }
-                    }
-                }
-                break;
-            case 2:     //Devuelve objeto de Seta para añadirlo a la lista.
-                if (resultCode == Activity.RESULT_OK) {
-
-                    ObjetoSetas nuevaSeta = (ObjetoSetas) data.getSerializableExtra("nuevaSeta");
-                    for (int i = 0; i < CamaraDatos.listDatos.size(); i++) {
-                        if (CamaraDatos.listDatos.get(i).getNombre() == nuevaSeta.getNombre()){
-                            CamaraDatos.listDatos.remove(i);
-                        }
-                    }
-                    CamaraDatos.listDatos.add(nuevaSeta);
+                    adaptador.setListSetas(Utilidades.obtenerListaMasReciente(con, con.NORMAL));
                     adaptador.notifyDataSetChanged();
 
                     Toast.makeText(this, "Seta añadida", Toast.LENGTH_SHORT).show();
@@ -138,7 +110,5 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
         }
-
     }
-
 }
