@@ -59,7 +59,7 @@ public class Utilidades {
         SQLiteDatabase db = con.getReadableDatabase();
         Cursor c = null;
 
-        String[] whereParams = {Utilidades.FAV_COLUMNA + " = true"};
+        String[] whereParams = {Utilidades.FAV_COLUMNA + " = 1"};
 
         if (param.equals("normal")) {
             c = db.rawQuery("SELECT * FROM " + NOMBRE_TABLA, null);
@@ -71,7 +71,7 @@ public class Utilidades {
         ObjetoSetas seta;
 
         while (c.moveToNext()) {
-            seta = new ObjetoSetas(c.getString(1), c.getString(2), c.getString(3), c.getString(4), Boolean.parseBoolean(c.getString(5)), c.getBlob(7));
+            seta = new ObjetoSetas(c.getString(1), c.getString(2), c.getString(3), c.getString(4), intToBool(Integer.parseInt(c.getString(5))), c.getBlob(7));
             listActual.add(seta);
         }
 
@@ -94,6 +94,16 @@ public class Utilidades {
 
     private Bitmap intABitmap(int img) {
         return BitmapFactory.decodeResource(this.context.getResources(), img);
+    }
+
+    private static boolean intToBool(int val) {
+
+        if (val == 0) {
+            return false;
+        } else {
+            return true;
+        }
+
     }
 
     private void inicializarDatos() {

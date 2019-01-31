@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -47,7 +49,7 @@ public class nuevaSeta extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
 
                 Intent abrirImagen = new Intent(Intent.ACTION_GET_CONTENT);
-                abrirImagen.setType("*/*");  //Lo suyo es que fuera "image/*", pero no parece querer aceptar ninguna imagen si pongo eso.
+                abrirImagen.setType("image/*");  //Lo suyo es que fuera "image/*", pero no parece querer aceptar ninguna imagen si pongo eso.
                 if (abrirImagen.resolveActivity(getPackageManager()) != null) {
                     startActivityForResult(abrirImagen, 3);
                 }
@@ -90,7 +92,9 @@ public class nuevaSeta extends AppCompatActivity {
                 cv.put(Utilidades.NOMBRECOMUN_COLUMNA, etNombreComun.getText().toString());
                 cv.put(Utilidades.URLLINEA_COLUMNA, "");
                 cv.put(Utilidades.COMESTIBLE_COLUMNA, edibleSwitch.isChecked());
-                cv.put(Utilidades.IMG_COLUMNA, Utilidades.convertirImagenABytes(BitmapFactory.decodeResource(getResources(), R.drawable.dano128px)));
+                cv.put(Utilidades.FAV_COLUMNA, false);
+                Bitmap newImg = ((BitmapDrawable)imgvw.getDrawable()).getBitmap();
+                cv.put(Utilidades.IMG_COLUMNA, Utilidades.convertirImagenABytes(newImg));
                 
                 try {
                     bd.insert(Utilidades.NOMBRE_TABLA, null, cv);
