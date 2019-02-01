@@ -35,7 +35,7 @@ public class nuevaSeta extends AppCompatActivity {
         setContentView(R.layout.activity_nueva_seta);
 
         con = new SetasSQLiteHelper(this, "Setas", null, Utilidades.VERSION);
-        
+
         imgvw = findViewById(R.id.imageViewAdd);
         etNombre = findViewById(R.id.etNombre);
         etNombreComun = findViewById(R.id.edNombreComun);
@@ -49,14 +49,13 @@ public class nuevaSeta extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
 
                 Intent abrirImagen = new Intent(Intent.ACTION_GET_CONTENT);
-                abrirImagen.setType("image/*");  //Lo suyo es que fuera "image/*", pero no parece querer aceptar ninguna imagen si pongo eso.
+                abrirImagen.setType("image/*");
                 if (abrirImagen.resolveActivity(getPackageManager()) != null) {
                     startActivityForResult(abrirImagen, 3);
                 }
                 return false;
             }
         });
-
     }
 
     @Override

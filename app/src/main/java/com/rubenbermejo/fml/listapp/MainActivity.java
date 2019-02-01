@@ -1,11 +1,10 @@
 package com.rubenbermejo.fml.listapp;
 
 import android.app.Activity;
-import android.content.Context;
+
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView lista;
     AdapterData adaptador;
     SetasSQLiteHelper con;
+    SwipeRefreshLayout actualiza;
     boolean mostrarFavoritos = false;
 
     @Override
@@ -33,9 +33,22 @@ public class MainActivity extends AppCompatActivity {
         con = new SetasSQLiteHelper(this, "Setas", null, Utilidades.VERSION);
 
         lista = findViewById(R.id.lista);
+        actualiza = findViewById(R.id.actualiza);
         lista.setLayoutManager(new LinearLayoutManager(this));
         adaptador = new AdapterData(Utilidades.obtenerListaMasReciente(con, con.NORMAL));
 
+        actualiza.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if(mostrarFavoritos) {
+                    adaptador.setListSetas(Utilidades.obtenerListaMasReciente(con, con.FAVORITOS));
+                } else {
+                    adaptador.setListSetas(Utilidades.obtenerListaMasReciente(con, con.NORMAL));
+                }
+                adaptador.notifyDataSetChanged();
+                actualiza.setRefreshing(false);
+            }
+        });
         adaptador.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
                     adaptador.setListSetas(Utilidades.obtenerListaMasReciente(con, con.NORMAL));
                     adaptador.notifyDataSetChanged();
                 }
-
                 mostrarFavoritos = !mostrarFavoritos;
                 break;
         }

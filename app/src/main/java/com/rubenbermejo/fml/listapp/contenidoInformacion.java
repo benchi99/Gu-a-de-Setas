@@ -44,6 +44,8 @@ public class contenidoInformacion extends AppCompatActivity {
 
         setaRecibida = (ObjetoSetas) informacionRecibida.getSerializable("seta");
 
+        System.out.println(setaRecibida.getId());
+
         if (informacionRecibida != null){
             tvNombre.setText(setaRecibida.getNombre());
             tvDescripcion.setText(setaRecibida.getDescripcion());
@@ -85,7 +87,7 @@ public class contenidoInformacion extends AppCompatActivity {
 
         switch (id) {
 
-            case R.id.togglerFav:
+            case R.id.togglerFav:       //Pone o quita los favoritos.
                 SQLiteDatabase db = con.getWritableDatabase();
                 String[] param = { String.valueOf(setaRecibida.getId()) };
                 ContentValues cv = new ContentValues();

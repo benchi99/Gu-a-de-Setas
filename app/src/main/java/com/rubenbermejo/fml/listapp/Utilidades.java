@@ -61,12 +61,13 @@ public class Utilidades {
         SQLiteDatabase db = con.getReadableDatabase();
         Cursor c = null;
 
-        String[] whereParams = {Utilidades.FAV_COLUMNA + " = 1"};
+        String[] params = { "1" };
+        String[] cols = { "*" };
 
         if (param.equals("normal")) {
             c = db.rawQuery("SELECT * FROM " + NOMBRE_TABLA, null);
         } else if (param.equals("favorito")){
-            c = db.rawQuery("SELECT * FROM " + NOMBRE_TABLA, whereParams);
+            c = db.query(Utilidades.NOMBRE_TABLA, cols, Utilidades.FAV_COLUMNA + " = ?", params, null, null, null);
         }
 
         ArrayList<ObjetoSetas> listActual = new ArrayList<>();
