@@ -44,6 +44,6 @@ public class SetasSQLiteHelper extends SQLiteOpenHelper {
         //Este método se ejecuta cada vez que la aplicación se actualice.
         db.execSQL("DROP TABLE IF EXISTS " + Utilidades.NOMBRE_TABLA);
 
-        db.execSQL(sql);
+        onCreate(db);
     }
 }

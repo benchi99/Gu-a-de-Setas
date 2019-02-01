@@ -14,7 +14,7 @@
     <string name="unflagFav">Unmark as Favourite</string>
     <string name="share">Share</string>
     <string name="seeOnline">Browse on the Web...</string>
-    <string name="email">Send through e-mail...</string>
+    <string name="email">Send via e-mail...</string>
     <string name="createShroomEdibility">Edible?</string>
     <string name="cancel">Cancel</string>
     <string name="addFav">Added to Favourites</string>
@@ -24,4 +24,9 @@
     <string name="showingFavs">Showing Favourites</string>
     <string name="hidingFavs">Showing all</string>
     <string name="aleatorio">Random</string>
+    <string name="modifyElement">Modify shroom</string>
+    <string name="deleteElement">Delete shroom</string>
+    <string name="delElementDescr">Are you sure you want to remove this shroom from your list?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

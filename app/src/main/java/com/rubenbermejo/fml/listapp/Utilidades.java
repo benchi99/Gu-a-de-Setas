@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -23,7 +24,7 @@ public class Utilidades {
     }
 
     //VERSIÓN
-    final public static int VERSION = 1;
+    final public static int VERSION = 6;
 
     //Tablas
     final public static String NOMBRE_TABLA = "SETAS";
@@ -39,6 +40,7 @@ public class Utilidades {
     final public static String IMG_COLUMNA = "imagen";
 
     public void rellenaBaseDeDatos(SQLiteDatabase bd) {
+        System.out.println(datos.size());
         ContentValues cvs = null;
         for (int i = 0; i < datos.size(); i++) {
             cvs = new ContentValues();
@@ -72,6 +74,7 @@ public class Utilidades {
 
         while (c.moveToNext()) {
             seta = new ObjetoSetas(c.getString(1), c.getString(2), c.getString(3), c.getString(4), intToBool(Integer.parseInt(c.getString(5))), c.getBlob(7));
+            seta.setId(c.getInt(0));
             listActual.add(seta);
         }
 
@@ -103,6 +106,20 @@ public class Utilidades {
         } else {
             return true;
         }
+
+    }
+
+    public static void delElement(SetasSQLiteHelper con, int id){
+        SQLiteDatabase db = con.getWritableDatabase();
+
+        String[] param = { String.valueOf(id) };
+
+        try {
+            db.delete(NOMBRE_TABLA, ID_COLUMNA + " = ?", param);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
 
     }
 

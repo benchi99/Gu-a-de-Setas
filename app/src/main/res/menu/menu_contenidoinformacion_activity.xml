@@ -3,24 +3,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:title="Marcar como favorito"
+        android:title="@string/flagFav"
         android:id="@+id/togglerFav"
         android:icon="@drawable/ic_fav_toggle"
         app:showAsAction="always"/>
 
     <item
-        android:title="Compartir"
+        android:title="@string/share"
         android:id="@+id/share"
         android:icon="@drawable/ic_share"
         app:showAsAction="always"/>
 
     <item
-        android:title="Ver en la Web..."
+        android:title="@string/modifyElement"
+        android:id="@+id/modSeta"
+        app:showAsAction="never"/>
+
+    <item
+        android:title="@string/deleteElement"
+        android:id="@+id/delSeta"
+        app:showAsAction="never"/>
+
+    <item
+        android:title="@string/seeOnline"
         android:id="@+id/verWeb"
         app:showAsAction="never"/>  <!-- Esto FUERZA a que sea parte del menú desplegable.-->
 
     <item
-        android:title="Enviar por correo..."
+        android:title="@string/email"
         android:id="@+id/enviarCorreo"
         app:showAsAction="never"/>
 </menu>

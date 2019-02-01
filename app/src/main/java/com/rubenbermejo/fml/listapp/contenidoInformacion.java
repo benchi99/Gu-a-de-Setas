@@ -1,8 +1,10 @@
 package com.rubenbermejo.fml.listapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -124,6 +126,22 @@ public class contenidoInformacion extends AppCompatActivity {
                     startActivity(emailIntent);
                 }
                 break;
+            case R.id.delSeta:
+                AlertDialog.Builder adB = new AlertDialog.Builder(this);
+                adB.setTitle(R.string.deleteElement);
+                adB.setMessage(R.string.delElementDescr);
+
+                adB.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Utilidades.delElement(con, setaRecibida.getId());
+                        setResult(Activity.RESULT_OK);
+                        finish();
+                    }
+                });
+                adB.setNegativeButton(R.string.no, null);
+                AlertDialog dialogo = adB.create();
+                dialogo.show();
         }
 
         return super.onOptionsItemSelected(item);

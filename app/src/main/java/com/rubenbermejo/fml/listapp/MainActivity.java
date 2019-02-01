@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                 informacion.putSerializable("seta", seta);
                 intent.putExtras(informacion);
 
-                startActivity(intent);
+                startActivityForResult(intent, 2);
             }
         });
 
@@ -102,9 +102,6 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == Activity.RESULT_OK) {
                     adaptador.setListSetas(Utilidades.obtenerListaMasReciente(con, con.NORMAL));
                     adaptador.notifyDataSetChanged();
-
-                    Toast.makeText(this, "Seta añadida", Toast.LENGTH_SHORT).show();
-
                 } else if (resultCode == Activity.RESULT_CANCELED) {
                     Toast.makeText(this, "Añadir seta cancelado.", Toast.LENGTH_SHORT).show();
                 }

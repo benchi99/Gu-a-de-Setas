@@ -25,4 +25,9 @@
     <string name="showingFavs">Mostrando favoritos</string>
     <string name="hidingFavs">Mostrando todos</string>
     <string name="aleatorio">Aleatorio</string>
+    <string name="modifyElement">Modificar seta</string>
+    <string name="deleteElement">Eliminar seta</string>
+    <string name="delElementDescr">¿Estás seguro de que quieres eliminar esta seta de la lista?</string>
+    <string name="yes">Sí</string>
+    <string name="no">No</string>
 </resources>
