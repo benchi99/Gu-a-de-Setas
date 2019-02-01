@@ -5,15 +5,12 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,17 +19,18 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
-public class nuevaSeta extends AppCompatActivity {
+public class editarSeta extends AppCompatActivity {
 
     ImageView imgvw;
     EditText etNombre, etNombreComun, etDescripcion;
     Switch edibleSwitch;
     SetasSQLiteHelper con;
+    ObjetoSetas setaAModificar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nueva_seta);
+        setContentView(R.layout.activity_editar_seta);
 
         con = new SetasSQLiteHelper(this, "Setas", null, Utilidades.VERSION);
 
@@ -42,7 +40,14 @@ public class nuevaSeta extends AppCompatActivity {
         etDescripcion = findViewById(R.id.etDescripcion);
         edibleSwitch = findViewById(R.id.edibleSwitch);
 
-        customizaActionBar();
+        Intent info = getIntent();
+        setaAModificar = (ObjetoSetas) info.getSerializableExtra("setaMod");
+
+        imgvw.setImageBitmap(Utilidades.convertirBytesAImagen(setaAModificar.getImagen()));
+        etNombre.setText(setaAModificar.getNombre());
+        etNombreComun.setText(setaAModificar.getnombreComun());
+        etDescripcion.setText(setaAModificar.getDescripcion());
+        edibleSwitch.setChecked(setaAModificar.getComestible());
 
         imgvw.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -76,33 +81,30 @@ public class nuevaSeta extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         SQLiteDatabase bd = con.getWritableDatabase();
-        
+
         int id = item.getItemId();
 
-        switch (id) {
-
-            case R.id.aceptarCrearSeta:
-                ContentValues cv = new ContentValues();
+        switch(id){
+            case R.id.aceptarModifSeta:
+                String[] params = { String.valueOf(setaAModificar.getId()) };
                 
-                cv.put(Utilidades.NOMBRE_COLUMNA, etNombre.getText().toString());
-                cv.put(Utilidades.DESCRIPCION_COLUMNA, etDescripcion.getText().toString());
-                cv.put(Utilidades.NOMBRECOMUN_COLUMNA, etNombreComun.getText().toString());
-                cv.put(Utilidades.URLLINEA_COLUMNA, "");
-                cv.put(Utilidades.COMESTIBLE_COLUMNA, edibleSwitch.isChecked());
-                cv.put(Utilidades.FAV_COLUMNA, false);
-                Bitmap newImg = ((BitmapDrawable)imgvw.getDrawable()).getBitmap();
-                cv.put(Utilidades.IMG_COLUMNA, Utilidades.convertirImagenABytes(newImg));
+                ContentValues cvs = new ContentValues();
+                cvs.put(Utilidades.NOMBRE_COLUMNA, etNombre.getText().toString());
+                cvs.put(Utilidades.DESCRIPCION_COLUMNA, etDescripcion.getText().toString());
+                cvs.put(Utilidades.NOMBRECOMUN_COLUMNA, etNombreComun.getText().toString());
+                cvs.put(Utilidades.COMESTIBLE_COLUMNA, edibleSwitch.isChecked());
+                Bitmap updImg = ((BitmapDrawable)imgvw.getDrawable()).getBitmap();
+                cvs.put(Utilidades.IMG_COLUMNA, Utilidades.convertirImagenABytes(updImg));
                 
                 try {
-                    bd.insert(Utilidades.NOMBRE_TABLA, null, cv);
-                } catch (Exception e) {
-                    Toast.makeText(this, "Error al insertar en la BD...", Toast.LENGTH_SHORT).show();
+                    bd.update(Utilidades.NOMBRE_TABLA, cvs, Utilidades.ID_COLUMNA + " = ?", params);
+                } catch (Exception e){
+                    Toast.makeText(this, "Error al actualizar el elemento en la base de datos.", Toast.LENGTH_SHORT).show();
                 }
-
                 setResult(Activity.RESULT_OK);
                 finish();
                 break;
-            case R.id.cancelarCrearSeta:
+            case R.id.cancelarModifSeta:
                 setResult(Activity.RESULT_CANCELED);
                 finish();
                 break;
@@ -113,20 +115,8 @@ public class nuevaSeta extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_nueva_seta, menu);
+        getMenuInflater().inflate(R.menu.menu_editar_seta, menu);
 
         return true;
-    }
-
-    /**
-     * Establece el título del Action Bar por "Añadir Seta" en
-     * todos los idiomas a los que está traducida la aplicación.
-     *
-     */
-
-    private void customizaActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-
-        actionBar.setTitle(R.string.anadirSeta);
     }
 }

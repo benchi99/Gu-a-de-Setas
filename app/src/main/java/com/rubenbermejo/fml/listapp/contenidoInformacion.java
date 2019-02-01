@@ -41,10 +41,7 @@ public class contenidoInformacion extends AppCompatActivity {
         con = new SetasSQLiteHelper(this, "Setas", null, Utilidades.VERSION);
 
         Bundle informacionRecibida = getIntent().getExtras();
-
         setaRecibida = (ObjetoSetas) informacionRecibida.getSerializable("seta");
-
-        System.out.println(setaRecibida.getId());
 
         if (informacionRecibida != null){
             tvNombre.setText(setaRecibida.getNombre());
@@ -86,7 +83,6 @@ public class contenidoInformacion extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id) {
-
             case R.id.togglerFav:       //Pone o quita los favoritos.
                 SQLiteDatabase db = con.getWritableDatabase();
                 String[] param = { String.valueOf(setaRecibida.getId()) };
@@ -94,15 +90,18 @@ public class contenidoInformacion extends AppCompatActivity {
                 if (!setaRecibida.getFavorito()) {
                     setaRecibida.setFavorito(true);
                     cv.put(Utilidades.FAV_COLUMNA, true);
-                    Toast.makeText(this, "Añadido a favoritos.", Toast.LENGTH_SHORT).show();
                 } else if (setaRecibida.getFavorito()){
                     setaRecibida.setFavorito(false);
                     cv.put(Utilidades.FAV_COLUMNA, false);
-                    Toast.makeText(this, "Eliminado de favoritos.", Toast.LENGTH_SHORT).show();
                 }
 
                 try {
                     db.update(Utilidades.NOMBRE_TABLA, cv, Utilidades.ID_COLUMNA + " = ?", param);
+                    if(!setaRecibida.getFavorito()){
+                        Toast.makeText(this, "Añadido a favoritos.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, "Eliminado de favoritos.", Toast.LENGTH_SHORT).show();
+                    }
                 } catch (Exception e) {
                     Toast.makeText(this, "No se ha podido actualizar la tabla...", Toast.LENGTH_SHORT).show();
                 }
@@ -144,6 +143,12 @@ public class contenidoInformacion extends AppCompatActivity {
                 adB.setNegativeButton(R.string.no, null);
                 AlertDialog dialogo = adB.create();
                 dialogo.show();
+                break;
+            case R.id.modSeta:
+                Intent modificar = new Intent(contenidoInformacion.this, editarSeta.class);
+                modificar.putExtra("setaMod", setaRecibida);
+                startActivityForResult(modificar, 1);
+
         }
 
         return super.onOptionsItemSelected(item);
