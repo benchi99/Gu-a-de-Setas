@@ -21,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
 
     RecyclerView lista;
     AdapterData adaptador;
-    SetasSQLiteHelper con;
     SwipeRefreshLayout actualiza;
     boolean mostrarFavoritos = false;
 
@@ -30,20 +29,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        con = new SetasSQLiteHelper(this, "Setas", null, Utilidades.VERSION);
-
         lista = findViewById(R.id.lista);
         actualiza = findViewById(R.id.actualiza);
         lista.setLayoutManager(new LinearLayoutManager(this));
-        adaptador = new AdapterData(Utilidades.obtenerListaMasReciente(con, con.NORMAL));
+        adaptador = new AdapterData(Utilidades.obtenerListaMasReciente(this, Utilidades.NORMAL));
 
         actualiza.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 if(mostrarFavoritos) {
-                    adaptador.setListSetas(Utilidades.obtenerListaMasReciente(con, con.FAVORITOS));
+                    adaptador.setListSetas(Utilidades.obtenerListaMasReciente(MainActivity.this, Utilidades.FAVORITOS));
                 } else {
-                    adaptador.setListSetas(Utilidades.obtenerListaMasReciente(con, con.NORMAL));
+                    adaptador.setListSetas(Utilidades.obtenerListaMasReciente(MainActivity.this, Utilidades.NORMAL));
                 }
                 adaptador.notifyDataSetChanged();
                 actualiza.setRefreshing(false);
@@ -90,12 +87,12 @@ public class MainActivity extends AppCompatActivity {
             case R.id.toggleFav:
                 if (!mostrarFavoritos) {
                     Toast.makeText(this, R.string.showingFavs, Toast.LENGTH_SHORT).show();
-                    ArrayList<ObjetoSetas> nuevo = Utilidades.obtenerListaMasReciente(con, con.FAVORITOS);
+                    ArrayList<ObjetoSetas> nuevo = Utilidades.obtenerListaMasReciente(this, Utilidades.FAVORITOS);
                     adaptador.setListSetas(nuevo);
                     adaptador.notifyDataSetChanged();
                 } else {
                     Toast.makeText(this, R.string.hidingFavs, Toast.LENGTH_SHORT).show();
-                    adaptador.setListSetas(Utilidades.obtenerListaMasReciente(con, con.NORMAL));
+                    adaptador.setListSetas(Utilidades.obtenerListaMasReciente(this, Utilidades.NORMAL));
                     adaptador.notifyDataSetChanged();
                 }
                 mostrarFavoritos = !mostrarFavoritos;
@@ -111,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         switch(requestCode) {
             case 2:     //Actualiza la lista.
                 if (resultCode == Activity.RESULT_OK) {
-                    adaptador.setListSetas(Utilidades.obtenerListaMasReciente(con, con.NORMAL));
+                    adaptador.setListSetas(Utilidades.obtenerListaMasReciente(this, Utilidades.NORMAL));
                     adaptador.notifyDataSetChanged();
                 } else if (resultCode == Activity.RESULT_CANCELED) {
                     Toast.makeText(this, "Añadir seta cancelado.", Toast.LENGTH_SHORT).show();

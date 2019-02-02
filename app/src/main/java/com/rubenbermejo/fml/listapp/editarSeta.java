@@ -1,6 +1,7 @@
 package com.rubenbermejo.fml.listapp;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -24,15 +25,12 @@ public class editarSeta extends AppCompatActivity {
     ImageView imgvw;
     EditText etNombre, etNombreComun, etDescripcion;
     Switch edibleSwitch;
-    SetasSQLiteHelper con;
     ObjetoSetas setaAModificar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_seta);
-
-        con = new SetasSQLiteHelper(this, "Setas", null, Utilidades.VERSION);
 
         imgvw = findViewById(R.id.imageViewAdd);
         etNombre = findViewById(R.id.etNombre);
@@ -80,8 +78,6 @@ public class editarSeta extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        SQLiteDatabase bd = con.getWritableDatabase();
-
         int id = item.getItemId();
 
         switch(id){
@@ -95,12 +91,10 @@ public class editarSeta extends AppCompatActivity {
                 cvs.put(Utilidades.COMESTIBLE_COLUMNA, edibleSwitch.isChecked());
                 Bitmap updImg = ((BitmapDrawable)imgvw.getDrawable()).getBitmap();
                 cvs.put(Utilidades.IMG_COLUMNA, Utilidades.convertirImagenABytes(updImg));
-                
-                try {
-                    bd.update(Utilidades.NOMBRE_TABLA, cvs, Utilidades.ID_COLUMNA + " = ?", params);
-                } catch (Exception e){
-                    Toast.makeText(this, "Error al actualizar el elemento en la base de datos.", Toast.LENGTH_SHORT).show();
-                }
+
+                ContentResolver cr = getContentResolver();
+
+                cr.update(Utilidades.CONTENT_URI, cvs, Utilidades.ID_COLUMNA + " = ?", params);
                 setResult(Activity.RESULT_OK);
                 finish();
                 break;

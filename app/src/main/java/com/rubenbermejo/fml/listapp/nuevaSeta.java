@@ -1,6 +1,7 @@
 package com.rubenbermejo.fml.listapp;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -27,14 +28,11 @@ public class nuevaSeta extends AppCompatActivity {
     ImageView imgvw;
     EditText etNombre, etNombreComun, etDescripcion;
     Switch edibleSwitch;
-    SetasSQLiteHelper con;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nueva_seta);
-
-        con = new SetasSQLiteHelper(this, "Setas", null, Utilidades.VERSION);
 
         imgvw = findViewById(R.id.imageViewAdd);
         etNombre = findViewById(R.id.etNombre);
@@ -74,9 +72,6 @@ public class nuevaSeta extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        SQLiteDatabase bd = con.getWritableDatabase();
-        
         int id = item.getItemId();
 
         switch (id) {
@@ -92,12 +87,9 @@ public class nuevaSeta extends AppCompatActivity {
                 cv.put(Utilidades.FAV_COLUMNA, false);
                 Bitmap newImg = ((BitmapDrawable)imgvw.getDrawable()).getBitmap();
                 cv.put(Utilidades.IMG_COLUMNA, Utilidades.convertirImagenABytes(newImg));
-                
-                try {
-                    bd.insert(Utilidades.NOMBRE_TABLA, null, cv);
-                } catch (Exception e) {
-                    Toast.makeText(this, "Error al insertar en la BD...", Toast.LENGTH_SHORT).show();
-                }
+
+                ContentResolver cr = getContentResolver();
+                cr.insert(Utilidades.CONTENT_URI, cv);
 
                 setResult(Activity.RESULT_OK);
                 finish();

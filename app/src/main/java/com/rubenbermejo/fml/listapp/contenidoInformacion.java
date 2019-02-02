@@ -3,6 +3,7 @@ package com.rubenbermejo.fml.listapp;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ClipData;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,7 +26,6 @@ public class contenidoInformacion extends AppCompatActivity {
     TextView tvNombre, tvComestibilidad, tvDescripcion, tvNombreComun;
     ImageView imageView;
     ObjetoSetas setaRecibida;
-    SetasSQLiteHelper con;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +37,6 @@ public class contenidoInformacion extends AppCompatActivity {
         tvDescripcion = findViewById(R.id.tvDescripcion);
         tvNombreComun = findViewById(R.id.tvNombreComun);
         imageView = findViewById(R.id.imageView);
-
-        con = new SetasSQLiteHelper(this, "Setas", null, Utilidades.VERSION);
 
         Bundle informacionRecibida = getIntent().getExtras();
         setaRecibida = (ObjetoSetas) informacionRecibida.getSerializable("seta");
@@ -84,7 +82,6 @@ public class contenidoInformacion extends AppCompatActivity {
 
         switch (id) {
             case R.id.togglerFav:       //Pone o quita los favoritos.
-                SQLiteDatabase db = con.getWritableDatabase();
                 String[] param = { String.valueOf(setaRecibida.getId()) };
                 ContentValues cv = new ContentValues();
                 if (!setaRecibida.getFavorito()) {
@@ -95,8 +92,10 @@ public class contenidoInformacion extends AppCompatActivity {
                     cv.put(Utilidades.FAV_COLUMNA, false);
                 }
 
+                ContentResolver cr = getContentResolver();
+
                 try {
-                    db.update(Utilidades.NOMBRE_TABLA, cv, Utilidades.ID_COLUMNA + " = ?", param);
+                    cr.update(Utilidades.CONTENT_URI, cv, Utilidades.ID_COLUMNA + " = ?", param);
                     if(!setaRecibida.getFavorito()){
                         Toast.makeText(this, "Añadido a favoritos.", Toast.LENGTH_SHORT).show();
                     } else {
@@ -135,7 +134,7 @@ public class contenidoInformacion extends AppCompatActivity {
                 adB.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Utilidades.delElement(con, setaRecibida.getId());
+                        Utilidades.delElement(contenidoInformacion.this, setaRecibida.getId());
                         setResult(Activity.RESULT_OK);
                         finish();
                     }
