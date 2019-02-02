@@ -1,5 +1,6 @@
 package com.rubenbermejo.fml.listapp;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.Resources;
@@ -7,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
@@ -38,6 +40,9 @@ public class Utilidades {
     final public static String ID_COLUMNA = "id";
     final public static String FAV_COLUMNA = "favorito";
     final public static String IMG_COLUMNA = "imagen";
+    final private static String AUTHORITY = "com.rubenbermejo.fml.contentprovidersetas";
+    public static final String uRI = "content://" + AUTHORITY + "/" + NOMBRE_TABLA;
+    public static final Uri CONTENT_URI = Uri.parse(uRI);
 
     public void rellenaBaseDeDatos(SQLiteDatabase bd) {
         System.out.println(datos.size());
@@ -58,17 +63,12 @@ public class Utilidades {
 
     public static ArrayList<ObjetoSetas> obtenerListaMasReciente(SetasSQLiteHelper con, String param) {
 
-        SQLiteDatabase db = con.getReadableDatabase();
-        Cursor c = null;
-
         String[] params = { "1" };
         String[] cols = { "*" };
 
-        if (param.equals("normal")) {
-            c = db.rawQuery("SELECT * FROM " + NOMBRE_TABLA, null);
-        } else if (param.equals("favorito")){
-            c = db.query(Utilidades.NOMBRE_TABLA, cols, Utilidades.FAV_COLUMNA + " = ?", params, null, null, null);
-        }
+        ContentResolver cr = con.contexto.getContentResolver();
+
+        Cursor c = cr.query(CONTENT_URI, cols, null, null, null);
 
         ArrayList<ObjetoSetas> listActual = new ArrayList<>();
         ObjetoSetas seta;
@@ -80,6 +80,20 @@ public class Utilidades {
         }
 
         return listActual;
+
+        /*
+        SQLiteDatabase db = con.getReadableDatabase();
+        Cursor c = null;
+
+
+        if (param.equals("normal")) {
+            c = db.rawQuery("SELECT * FROM " + NOMBRE_TABLA, null);
+        } else if (param.equals("favorito")){
+            c = db.query(Utilidades.NOMBRE_TABLA, cols, Utilidades.FAV_COLUMNA + " = ?", params, null, null, null);
+        }
+
+
+        */
     }
 
     public static byte[] convertirImagenABytes(Bitmap bmp) {
