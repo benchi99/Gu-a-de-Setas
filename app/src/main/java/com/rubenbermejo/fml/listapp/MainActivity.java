@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         con = new SetasSQLiteHelper(this, "Setas", null, Utilidades.VERSION);
 
+        Utilidades.carga(this);
         lista = findViewById(R.id.lista);
         actualiza = findViewById(R.id.actualiza);
         lista.setLayoutManager(new LinearLayoutManager(this));
@@ -111,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
         switch(requestCode) {
             case 2:     //Actualiza la lista.
                 if (resultCode == Activity.RESULT_OK) {
+                    Utilidades.carga(this);
                     adaptador.setListSetas(Utilidades.obtenerListaMasReciente(con, con.NORMAL));
                     adaptador.notifyDataSetChanged();
                 } else if (resultCode == Activity.RESULT_CANCELED) {

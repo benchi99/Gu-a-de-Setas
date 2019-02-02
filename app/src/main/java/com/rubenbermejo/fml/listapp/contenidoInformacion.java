@@ -32,6 +32,8 @@ public class contenidoInformacion extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contenido_informacion);
 
+        Utilidades.carga(this);
+
         tvNombre = findViewById(R.id.tvNombre);
         tvComestibilidad = findViewById(R.id.tvComestibilidad);
         tvDescripcion = findViewById(R.id.tvDescripcion);

@@ -29,6 +29,7 @@ public class editarSeta extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Utilidades.carga(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_seta);
 

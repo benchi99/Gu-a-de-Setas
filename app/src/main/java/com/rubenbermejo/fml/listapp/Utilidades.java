@@ -1,5 +1,6 @@
 package com.rubenbermejo.fml.listapp;
 
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.Resources;
@@ -7,6 +8,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
@@ -17,6 +20,7 @@ public class Utilidades {
 
     Context context;
     ArrayList<ObjetoSetas> datos;
+    static ProgressDialog prog;
 
     public Utilidades (Context context) {
         this.context = context;
@@ -122,7 +126,9 @@ public class Utilidades {
         }
     }
 
-
+    public static void carga(Context contexto){
+        new Ralentizador(contexto).execute();
+    }
 
     private void inicializarDatos() {
         datos = new ArrayList<>();
