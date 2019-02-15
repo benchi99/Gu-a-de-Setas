@@ -52,7 +52,6 @@ public class Utilidades {
         ContentResolver cr = context.getContentResolver();
         Cursor c;
 
-
         if (param.equals(NORMAL)){
             c = cr.query(CONTENT_URI, cols, null, null, null);
         } else {
