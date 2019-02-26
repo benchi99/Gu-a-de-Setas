@@ -30,7 +30,6 @@ public class Ralentizador extends AsyncTask<Void, Integer, Boolean> {
         prog.setMessage("Consultando base de datos...");
         prog.setMax(100);
         prog.show();
-
     }
 
     @Override
