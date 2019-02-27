@@ -3,6 +3,7 @@ package com.rubenbermejo.fml.listapp;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
@@ -50,61 +51,126 @@ public class Utilidades {
 
     final private static HttpClient httpClient = new DefaultHttpClient();
 
-    public static ArrayList<ObjetoSetas> obtenerListaMasReciente(Context context, String param) throws IOException, JSONException {
+    /**
+     * Obtiene la lista de setas más reciente, realizando
+     * un método GET al servicio REST ubicado en
+     * dam2.ieslamarisma.net/2019/rubenbermejo
+     *
+     * @param param Parametro de obtención de setas.
+     * @return Lista de setas más reciente.
+     */
+
+    public static ArrayList<ObjetoSetas> obtenerListaMasReciente(String param) {
         HttpGet getAll;
 
-        if (param.equals(NORMAL)){
-            getAll = new HttpGet(DIRECCION_REST_LOCAL + POST_GET_ALL);
-        } else {
-            getAll = new HttpGet(DIRECCION_REST_LOCAL + GET_FAV );
+        try {
+            if (param.equals(NORMAL)) {
+                getAll = new HttpGet(DIRECCION_REST_MARISMA + POST_GET_ALL);
+            } else {
+                getAll = new HttpGet(DIRECCION_REST_MARISMA + GET_FAV);
+            }
+            getAll.setHeader("content-type", "application/json");
+
+            HttpResponse respuesta = httpClient.execute(getAll);
+            String strRespuesta = EntityUtils.toString(respuesta.getEntity());
+
+            JSONArray jsonArray = new JSONArray(strRespuesta);
+            ArrayList<ObjetoSetas> listActual = new ArrayList<>();
+            ObjetoSetas seta;
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject JSONobj = jsonArray.getJSONObject(i);
+
+                seta = new ObjetoSetas(JSONobj.getString("NOMBRE"), JSONobj.getString("NOMBRE"), JSONobj.getString("NOMBRE_COMUN"), JSONobj.getString("URL"), intToBool(JSONobj.getInt("COMESTIBLE")), IMG_LOCATION + JSONobj.getString("IMAGEN"));
+                seta.setId(JSONobj.getInt("ID"));
+                seta.setFavorito(intToBool(JSONobj.getInt("FAVORITO")));
+
+                listActual.add(seta);
+            }
+            return listActual;
+        } catch (IOException ioe) {
+            if (param.equals(NORMAL)){
+                Log.e("REST API", "Error al realizar petición GET " + DIRECCION_REST_MARISMA + POST_GET_ALL + ".");
+            } else {
+                Log.e("REST API", "Error al realizar petición GET " + DIRECCION_REST_MARISMA + GET_FAV + ".");
+            }
+            ioe.printStackTrace();
+            return null;
+        } catch (JSONException jsone) {
+            Log.e("REST API", "Error al leer JSON.");
+            jsone.printStackTrace();
+            return null;
         }
-        getAll.setHeader("content-type", "application/json");
+   }
 
-        HttpResponse respuesta = httpClient.execute(getAll);
-        String strRespuesta = EntityUtils.toString(respuesta.getEntity());
+    /**
+     * Obtiene una seta del servicio REST ubicado
+     * en dam2.ieslamarisma.net/2019/rubenbermejo
+     * según identificador especificado.
+     *
+     * @param id Identificador de seta.
+     * @return Seta coincidente con el identificador especificado, si existe.
+     */
 
-        JSONArray jsonArray = new JSONArray(strRespuesta);
-        ArrayList<ObjetoSetas> listActual = new ArrayList<>();
-        ObjetoSetas seta;
+   public static ObjetoSetas obtenerSeta(int id) {
+        HttpGet getSeta = new HttpGet(DIRECCION_REST_MARISMA + GET_PUT_DELETE_ID + String.valueOf(id));
+        getSeta.setHeader("content-type", "application-json");
 
-        for (int i = 0; i < jsonArray.length(); i++){
-            JSONObject JSONobj = jsonArray.getJSONObject(i);
+        try {
+            HttpResponse respuesta = httpClient.execute(getSeta);
+            String strResp = EntityUtils.toString(respuesta.getEntity());
 
-            seta = new ObjetoSetas(JSONobj.getString("NOMBRE"), JSONobj.getString("NOMBRE"), JSONobj.getString("NOMBRE_COMUN"), JSONobj.getString("URL"), intToBool(JSONobj.getInt("COMESTIBLE")), IMG_LOCATION + JSONobj.getString("IMAGEN"));
-            seta.setFavorito(intToBool(JSONobj.getInt("FAVORITO")));
+            JSONObject json = new JSONObject(strResp);
+            ObjetoSetas seta = new ObjetoSetas(json.getString("NOMBRE"), json.getString("DESCRIPCION"), json.getString("NOMBRE_COMUN"), json.getString("URL"), intToBool(json.getInt("COMESTIBLE")), IMG_LOCATION + json.getString("IMAGEN"));
+            seta.setId(json.getInt("ID"));
+            seta.setFavorito(intToBool(json.getInt("FAVORITO")));
 
-            listActual.add(seta);
+            return seta;
+        } catch (IOException ioe) {
+            Log.e("REST API", "Error al realizar peticion GET " + DIRECCION_REST_MARISMA + GET_PUT_DELETE_ID + String.valueOf(id) + ".");
+            ioe.printStackTrace();
+            return null;
+        } catch (JSONException jsone) {
+            Log.e("REST API", "Error a la hora de leer JSON.");
+            jsone.printStackTrace();
+            return null;
         }
-        return listActual;
+   }
+
+
+   public static void insertarSeta(){
 
    }
 
-    public static byte[] convertirImagenABytes(Bitmap bmp) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(175000);
-        bmp.compress(Bitmap.CompressFormat.PNG, 0, baos);
-        byte[] blob = baos.toByteArray();
-        return blob;
-    }
+   public static void modificarSeta() {
 
-    public static Bitmap convertirBytesAImagen(byte[] blob) {
-        Bitmap bmp;
-        ByteArrayInputStream bais = new ByteArrayInputStream(blob);
-        bmp = BitmapFactory.decodeStream(bais);
-        return bmp;
-    }
+   }
 
-    private static boolean intToBool(int val) {
+   public static void delElement(Context context, int id){
 
-        if (val == 0) {
-            return false;
-        } else {
-            return true;
-        }
+   }
 
-    }
+   public static byte[] convertirImagenABytes(Bitmap bmp) {
+       ByteArrayOutputStream baos = new ByteArrayOutputStream(175000);
+       bmp.compress(Bitmap.CompressFormat.PNG, 0, baos);
+       byte[] blob = baos.toByteArray();
+       return blob;
+   }
 
-    public static void delElement(Context context, int id){
+   public static Bitmap convertirBytesAImagen(byte[] blob) {
+       Bitmap bmp;
+       ByteArrayInputStream bais = new ByteArrayInputStream(blob);
+       bmp = BitmapFactory.decodeStream(bais);
+       return bmp;
+   }
 
-    }
+   private static boolean intToBool(int val) {
 
+       if (val == 0) {
+           return false;
+       } else {
+           return true;
+       }
+
+   }
 }
