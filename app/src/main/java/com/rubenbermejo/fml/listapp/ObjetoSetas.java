@@ -7,12 +7,11 @@ import java.util.Random;
 
 public class ObjetoSetas implements Serializable {
 
-    private String nombre, descripcion, nombreComun, URLlinea;
+    private String nombre, descripcion, nombreComun, URLlinea, imagen;
     private boolean Comestible, favorito;
     private int id;
-    private byte[] imagen;
 
-    public ObjetoSetas(String nombre, String descripcion, String nombreComun, String URLlinea, boolean Comestible, byte[] imagen) {
+    public ObjetoSetas(String nombre, String descripcion, String nombreComun, String URLlinea, boolean Comestible, String imagen) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.nombreComun = nombreComun;
@@ -66,11 +65,11 @@ public class ObjetoSetas implements Serializable {
         this.Comestible = Comestible;
     }
 
-    public byte[] getImagen() {
+    public String getImagen() {
         return imagen;
     }
 
-    public void setImagen(byte[] imagen) {
+    public void setImagen(String imagen) {
         this.imagen = imagen;
     }
 
