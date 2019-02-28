@@ -10,6 +10,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
@@ -22,6 +23,8 @@ import java.util.ArrayList;
 
 public class RESTasks {
     final private static HttpClient httpClient = new DefaultHttpClient();
+    ArrayList<ObjetoSetas> listaActual;
+    ObjetoSetas setaDevolver;
 
     /**
      * AsyncTask que obtiene realizando un método GET una
@@ -55,6 +58,7 @@ public class RESTasks {
         @Override
         protected void onPostExecute(ArrayList<ObjetoSetas> objetoSetas) {
             super.onPostExecute(objetoSetas);
+            listaActual = objetoSetas;
             pdialog.dismiss();
         }
 
@@ -145,13 +149,22 @@ public class RESTasks {
                 return null;
             }
         }
+
+        @Override
+        protected void onPostExecute(ObjetoSetas objetoSetas) {
+            super.onPostExecute(objetoSetas);
+            setaDevolver = objetoSetas;
+        }
     }
 
+    /**
+     * Inserta una Seta en el servicio REST ubicado
+     * en dam2.ieslamarisma.net/2019/rubenbermejo
+     *
+     */
     private class InsertarSeta extends AsyncTask<ObjetoSetas, Integer, Boolean>{
         @Override
         protected Boolean doInBackground(ObjetoSetas... objetoSetas) {
-            boolean resultado = true;
-
             HttpPost postSeta = new HttpPost(Utilidades.DIRECCION_REST_MARISMA + Utilidades.POST_GET_ALL);
             postSeta.setHeader("content-type", "application/json");
 
@@ -175,64 +188,113 @@ public class RESTasks {
                 String respStr = EntityUtils.toString(respuesta.getEntity());
 
                 if (!respStr.equals("true")){
-                    resultado = false;
+                    return false;
                 }
             } catch (IOException ioe) {
                 Log.e("REST API", "Error al realizar método POST! " + ioe.getMessage());
-                resultado = false;
+                return false;
             } catch (JSONException jsone) {
                 Log.e("REST API", "Error al formar JSON. " + jsone.getMessage());
-                resultado = false;
+                return false;
             }
 
-            return resultado;
+            return true;
         }
     }
 
+    /**
+     * Elimina una seta en el servicio REST ubicado en
+     * dam2.ieslamarisma.net/2019/rubenbermejo
+     *
+     */
     private class EliminarSeta extends AsyncTask<Integer, Integer, Boolean> {
         @Override
         protected Boolean doInBackground(Integer... integers) {
-            boolean resultado = true;
-
             HttpDelete del = new HttpDelete(Utilidades.DIRECCION_REST_MARISMA + Utilidades.GET_PUT_DELETE_ID + String.valueOf(integers[0]));
 
             del.setHeader("content-type", "application/json");
-            
+
             try {
                 HttpResponse respuesta = httpClient.execute(del);
                 String respStr = EntityUtils.toString(respuesta.getEntity());
 
-                if (respStr.equals("true")){
-                    resultado = true;
+                if (!respStr.equals("true")){
+                    return false;
                 }
             } catch (IOException ioe) {
                 Log.e("REST API", "Error al realizar petición DELETE! " + ioe.getMessage());
-                resultado = false;
+                return false;
             }
-
-            return resultado;
+            return true;
         }
     }
 
-    public static ArrayList<ObjetoSetas> obtenListaMasReciente(String param){
-        return null;
+    /**
+     * Actualiza una seta en el servicio REST ubicado en
+     * dam2.ieslamarisma.net/2019/rubenbermejo
+     */
+    private class ActualizarSeta extends AsyncTask<ObjetoSetas, Integer, Boolean> {
+        @Override
+        protected Boolean doInBackground(ObjetoSetas... objetoSetas) {
+            HttpPut put = new HttpPut(Utilidades.DIRECCION_REST_MARISMA + Utilidades.GET_PUT_DELETE_ID + String.valueOf(objetoSetas[0].getId()));
+            put.setHeader("content-type", "application/json");
+
+            try {
+                JSONObject setaActualizar = new JSONObject();
+                setaActualizar.put("nombre", objetoSetas[0].getNombre());
+                setaActualizar.put("descripcion", objetoSetas[0].getDescripcion());
+                setaActualizar.put("nombre_comun", objetoSetas[0].getnombreComun());
+                setaActualizar.put("comestible", Utilidades.boolToInt(objetoSetas[0].getComestible()));
+                setaActualizar.put("favorito", Utilidades.boolToInt(objetoSetas[0].getFavorito()));
+                if (objetoSetas[0].getURLlinea() != null) {
+                    setaActualizar.put("URL", objetoSetas[0].getURLlinea());
+                }
+                setaActualizar.put("imagen", objetoSetas[0].getImagen());
+
+                StringEntity ent = new StringEntity(setaActualizar.toString());
+                put.setEntity(ent);
+
+                HttpResponse resp = httpClient.execute(put);
+                String respStr = EntityUtils.toString(resp.getEntity());
+
+                if (!respStr.equals("true")){
+                    return false;
+                }
+            } catch (IOException ioe) {
+                return false;
+            } catch (JSONException jsone) {
+                return false;
+            }
+
+            return true;
+        }
     }
 
-    public static ObjetoSetas obtenerSeta(int id) {
-        return null;
+    public ArrayList<ObjetoSetas> obtenListaMasReciente(Context context, String param){
+        TareaGETALLSetas getallSetas = new TareaGETALLSetas(context);
+        getallSetas.execute(param);
+        return listaActual;
     }
 
-    public static void insertarSeta(){
-
+    public ObjetoSetas obtenerSeta(int id) {
+        ObtenSeta obSeta = new ObtenSeta();
+        obSeta.execute(id);
+        return setaDevolver;
     }
 
-
-    public static void modificarSeta() {
-
+    public void insertarSeta(ObjetoSetas seta){
+        InsertarSeta ins = new InsertarSeta();
+        ins.execute(seta);
     }
 
-    public static void eliminarSeta(Context context, int id){
+    public void modificarSeta(ObjetoSetas seta){
+        ActualizarSeta upd = new ActualizarSeta();
+        upd.execute(seta);
+    }
 
+    public void eliminarSeta(int id){
+        EliminarSeta del = new EliminarSeta();
+        del.execute(id);
     }
 }
 
