@@ -77,20 +77,7 @@ public class nuevaSeta extends AppCompatActivity {
         switch (id) {
 
             case R.id.aceptarCrearSeta:
-                ContentValues cv = new ContentValues();
-                
-                cv.put(Utilidades.NOMBRE_COLUMNA, etNombre.getText().toString());
-                cv.put(Utilidades.DESCRIPCION_COLUMNA, etDescripcion.getText().toString());
-                cv.put(Utilidades.NOMBRECOMUN_COLUMNA, etNombreComun.getText().toString());
-                cv.put(Utilidades.URLLINEA_COLUMNA, "");
-                cv.put(Utilidades.COMESTIBLE_COLUMNA, edibleSwitch.isChecked());
-                cv.put(Utilidades.FAV_COLUMNA, false);
-                Bitmap newImg = ((BitmapDrawable)imgvw.getDrawable()).getBitmap();
-                cv.put(Utilidades.IMG_COLUMNA, Utilidades.convertirImagenABytes(newImg));
-
-                ContentResolver cr = getContentResolver();
-                cr.insert(Utilidades.CONTENT_URI, cv);
-
+                //POST
                 setResult(Activity.RESULT_OK);
                 finish();
                 break;

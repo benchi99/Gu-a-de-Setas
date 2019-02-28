@@ -10,6 +10,7 @@ public class ObjetoSetas implements Serializable {
     private String nombre, descripcion, nombreComun, URLlinea, imagen;
     private boolean Comestible, favorito;
     private int id;
+    private Bitmap img;
 
     public ObjetoSetas(String nombre, String descripcion, String nombreComun, String URLlinea, boolean Comestible, String imagen) {
         this.nombre = nombre;
@@ -76,6 +77,10 @@ public class ObjetoSetas implements Serializable {
     public boolean getFavorito() { return favorito; }
 
     public void setFavorito(boolean favorito) { this.favorito = favorito; }
+
+    public Bitmap getImg() {return img;}
+
+    public void setImg(Bitmap img) { this.img = img; }
 
     private String getToStringComestible(){
 

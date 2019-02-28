@@ -52,7 +52,7 @@ public class contenidoInformacion extends AppCompatActivity {
                 tvComestibilidad.setText(R.string.notEdible);
                 tvComestibilidad.setTextColor(Color.RED);
             }
-            imageView.setImageBitmap(Utilidades.convertirBytesAImagen(setaRecibida.getImagen()));
+            imageView.setImageBitmap(setaRecibida.getImg());
         }
 
         customizaActionBar(setaRecibida.getNombre());
@@ -82,28 +82,7 @@ public class contenidoInformacion extends AppCompatActivity {
 
         switch (id) {
             case R.id.togglerFav:       //Pone o quita los favoritos.
-                String[] param = { String.valueOf(setaRecibida.getId()) };
-                ContentValues cv = new ContentValues();
-                if (!setaRecibida.getFavorito()) {
-                    setaRecibida.setFavorito(true);
-                    cv.put(Utilidades.FAV_COLUMNA, true);
-                } else if (setaRecibida.getFavorito()){
-                    setaRecibida.setFavorito(false);
-                    cv.put(Utilidades.FAV_COLUMNA, false);
-                }
-
-                ContentResolver cr = getContentResolver();
-
-                try {
-                    cr.update(Utilidades.CONTENT_URI, cv, Utilidades.ID_COLUMNA + " = ?", param);
-                    if(!setaRecibida.getFavorito()){
-                        Toast.makeText(this, "Añadido a favoritos.", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(this, "Eliminado de favoritos.", Toast.LENGTH_SHORT).show();
-                    }
-                } catch (Exception e) {
-                    Toast.makeText(this, "No se ha podido actualizar la tabla...", Toast.LENGTH_SHORT).show();
-                }
+                //PUT
                 break;
             case R.id.share:
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -134,7 +113,7 @@ public class contenidoInformacion extends AppCompatActivity {
                 adB.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Utilidades.delElement(contenidoInformacion.this, setaRecibida.getId());
+                        //DELETE
                         setResult(Activity.RESULT_OK);
                         finish();
                     }

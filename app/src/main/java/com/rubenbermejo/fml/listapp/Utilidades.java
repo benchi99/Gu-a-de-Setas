@@ -3,7 +3,9 @@ package com.rubenbermejo.fml.listapp;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
@@ -18,6 +20,9 @@ import org.json.JSONObject;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class Utilidades {
@@ -78,6 +83,14 @@ public class Utilidades {
            return 1;
        } else {
            return 0;
+       }
+   }
+
+
+   private class SubirImagenAlServidor extends AsyncTask<Void, Void, String> {
+       @Override
+       protected String doInBackground(Void... voids) {
+           return null;
        }
    }
 }

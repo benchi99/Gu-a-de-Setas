@@ -1,8 +1,12 @@
 package com.rubenbermejo.fml.listapp;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +14,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolderDatos> implements View.OnClickListener{
 
     ArrayList<ObjetoSetas> listSetas;
     private View.OnClickListener listener;
+    Bitmap bmp = null;
 
     public AdapterData(ArrayList<ObjetoSetas> listDatos) {
         this.listSetas = listDatos;
@@ -34,7 +43,8 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolderDato
     public void onBindViewHolder(@NonNull ViewHolderDatos viewHolderDatos, int i) {
         viewHolderDatos.nombre.setText(listSetas.get(i).getNombre());
         viewHolderDatos.informacion.setText(listSetas.get(i).getnombreComun());
-        viewHolderDatos.imagen.setImageBitmap(Utilidades.convertirBytesAImagen(listSetas.get(i).getImagen()));
+        listSetas.get(i).setImg(bajarImagen(listSetas.get(i).getImagen()));
+        viewHolderDatos.imagen.setImageBitmap(listSetas.get(i).getImg());
         if (listSetas.get(i).getComestible()) {
             viewHolderDatos.comestibilidad.setText(R.string.edible);
             viewHolderDatos.comestibilidad.setTextColor(Color.GREEN);
@@ -68,8 +78,12 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolderDato
         return this.listSetas;
     }
 
-    public class ViewHolderDatos extends RecyclerView.ViewHolder {
+    private Bitmap bajarImagen(String url) {
+        new DescargarImagen().execute(Utilidades.DIRECCION_REST_MARISMA + Utilidades.IMG_LOCATION + url);
+        return bmp;
+    }
 
+    public class ViewHolderDatos extends RecyclerView.ViewHolder {
 
         TextView nombre, informacion, comestibilidad;
         ImageView imagen;
@@ -82,6 +96,31 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolderDato
             comestibilidad = itemView.findViewById(R.id.idComest);
         }
 
+    }
+
+    private class DescargarImagen extends AsyncTask<String, Void, Bitmap> {
+
+        @Override
+        protected Bitmap doInBackground(String... strings) {
+            String imagen = strings[0];
+            Bitmap imgAMostrar = null;
+            try {
+                InputStream ins = new URL(imagen).openStream();
+                imgAMostrar = BitmapFactory.decodeStream(ins);
+            } catch (MalformedURLException badURLe) {
+                Log.e("REST API", "La URL que ha sido dada está mal formada.");
+                badURLe.printStackTrace();
+            } catch (IOException ioe) {
+                Log.e("REST API", "Hubo un error al descargar " + imagen);
+                ioe.printStackTrace();
+            }
+            return imgAMostrar;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            bmp = bitmap;
+        }
     }
 
 }

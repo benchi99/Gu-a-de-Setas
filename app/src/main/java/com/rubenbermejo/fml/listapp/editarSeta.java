@@ -41,7 +41,7 @@ public class editarSeta extends AppCompatActivity {
         Intent info = getIntent();
         setaAModificar = (ObjetoSetas) info.getSerializableExtra("setaMod");
 
-        imgvw.setImageBitmap(Utilidades.convertirBytesAImagen(setaAModificar.getImagen()));
+        imgvw.setImageBitmap(setaAModificar.getImg());
         etNombre.setText(setaAModificar.getNombre());
         etNombreComun.setText(setaAModificar.getnombreComun());
         etDescripcion.setText(setaAModificar.getDescripcion());
@@ -82,19 +82,7 @@ public class editarSeta extends AppCompatActivity {
 
         switch(id){
             case R.id.aceptarModifSeta:
-                String[] params = { String.valueOf(setaAModificar.getId()) };
-                
-                ContentValues cvs = new ContentValues();
-                cvs.put(Utilidades.NOMBRE_COLUMNA, etNombre.getText().toString());
-                cvs.put(Utilidades.DESCRIPCION_COLUMNA, etDescripcion.getText().toString());
-                cvs.put(Utilidades.NOMBRECOMUN_COLUMNA, etNombreComun.getText().toString());
-                cvs.put(Utilidades.COMESTIBLE_COLUMNA, edibleSwitch.isChecked());
-                Bitmap updImg = ((BitmapDrawable)imgvw.getDrawable()).getBitmap();
-                cvs.put(Utilidades.IMG_COLUMNA, Utilidades.convertirImagenABytes(updImg));
-
-                ContentResolver cr = getContentResolver();
-
-                cr.update(Utilidades.CONTENT_URI, cvs, Utilidades.ID_COLUMNA + " = ?", params);
+                //PUT
                 setResult(Activity.RESULT_OK);
                 finish();
                 break;

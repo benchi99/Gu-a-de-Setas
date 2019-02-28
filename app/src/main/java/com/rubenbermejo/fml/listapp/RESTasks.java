@@ -26,95 +26,7 @@ public class RESTasks {
     ArrayList<ObjetoSetas> listaActual;
     ObjetoSetas setaDevolver;
 
-    /**
-     * AsyncTask que obtiene realizando un método GET una
-     * lista de Setas desde dam2.ieslamarisma.net/2019/rubenbermejo
-     *
-     */
-    private class TareaGETALLSetas extends AsyncTask<String, Integer, ArrayList<ObjetoSetas>> {
 
-        ProgressDialog pdialog;
-        Context context;
-
-        public TareaGETALLSetas(Context context){
-            this.context = context;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            pdialog = new ProgressDialog(context);
-            pdialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            pdialog.setMessage("Obteniendo del servicio...");
-            pdialog.setMax(100);
-            pdialog.show();
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-            pdialog.setProgress(values[0]);
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<ObjetoSetas> objetoSetas) {
-            super.onPostExecute(objetoSetas);
-            listaActual = objetoSetas;
-            pdialog.dismiss();
-        }
-
-        @Override
-        protected ArrayList<ObjetoSetas> doInBackground(String... strings) {
-            HttpGet getAll;
-
-            try {
-                if (strings[0].equals(Utilidades.NORMAL)) {
-                    getAll = new HttpGet(Utilidades.DIRECCION_REST_MARISMA + Utilidades.POST_GET_ALL);
-                } else {
-                    getAll = new HttpGet(Utilidades.DIRECCION_REST_MARISMA + Utilidades.GET_FAV);
-                }
-                getAll.setHeader("content-type", "application/json");
-
-                publishProgress(20);
-
-                HttpResponse respuesta = httpClient.execute(getAll);
-                String strRespuesta = EntityUtils.toString(respuesta.getEntity());
-
-                publishProgress(40);
-
-                JSONArray jsonArray = new JSONArray(strRespuesta);
-                ArrayList<ObjetoSetas> listActual = new ArrayList<>();
-                ObjetoSetas seta;
-
-                publishProgress(60);
-
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject JSONobj = jsonArray.getJSONObject(i);
-
-                    seta = new ObjetoSetas(JSONobj.getString("NOMBRE"), JSONobj.getString("NOMBRE"), JSONobj.getString("NOMBRE_COMUN"), JSONobj.getString("URL"), Utilidades.intToBool(JSONobj.getInt("COMESTIBLE")), Utilidades.IMG_LOCATION + JSONobj.getString("IMAGEN"));
-                    seta.setId(JSONobj.getInt("ID"));
-                    seta.setFavorito(Utilidades.intToBool(JSONobj.getInt("FAVORITO")));
-
-                    listActual.add(seta);
-                }
-
-                publishProgress(100);
-
-                return listActual;
-            } catch (IOException ioe) {
-                if (strings[0].equals(Utilidades.NORMAL)){
-                    Log.e("REST API", "Error al realizar petición GET " + Utilidades.DIRECCION_REST_MARISMA + Utilidades.POST_GET_ALL + ".");
-                } else {
-                    Log.e("REST API", "Error al realizar petición GET " + Utilidades.DIRECCION_REST_MARISMA + Utilidades.GET_FAV + ".");
-                }
-                ioe.printStackTrace();
-                return null;
-            } catch (JSONException jsone) {
-                Log.e("REST API", "Error al leer JSON.");
-                jsone.printStackTrace();
-                return null;
-            }
-        }
-    }
 
     /**
      * Obtiene una seta del servicio REST ubicado
@@ -270,11 +182,7 @@ public class RESTasks {
         }
     }
 
-    public ArrayList<ObjetoSetas> obtenListaMasReciente(Context context, String param){
-        TareaGETALLSetas getallSetas = new TareaGETALLSetas(context);
-        getallSetas.execute(param);
-        return listaActual;
-    }
+
 
     public ObjetoSetas obtenerSeta(int id) {
         ObtenSeta obSeta = new ObtenSeta();
