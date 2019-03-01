@@ -43,7 +43,6 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolderDato
     public void onBindViewHolder(@NonNull ViewHolderDatos viewHolderDatos, int i) {
         viewHolderDatos.nombre.setText(listSetas.get(i).getNombre());
         viewHolderDatos.informacion.setText(listSetas.get(i).getnombreComun());
-        listSetas.get(i).setImg(bajarImagen(listSetas.get(i).getImagen()));
         viewHolderDatos.imagen.setImageBitmap(listSetas.get(i).getImg());
         if (listSetas.get(i).getComestible()) {
             viewHolderDatos.comestibilidad.setText(R.string.edible);
@@ -78,11 +77,6 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolderDato
         return this.listSetas;
     }
 
-    private Bitmap bajarImagen(String url) {
-        new DescargarImagen().execute(Utilidades.DIRECCION_REST_MARISMA + Utilidades.IMG_LOCATION + url);
-        return bmp;
-    }
-
     public class ViewHolderDatos extends RecyclerView.ViewHolder {
 
         TextView nombre, informacion, comestibilidad;
@@ -96,31 +90,6 @@ public class AdapterData extends RecyclerView.Adapter<AdapterData.ViewHolderDato
             comestibilidad = itemView.findViewById(R.id.idComest);
         }
 
-    }
-
-    private class DescargarImagen extends AsyncTask<String, Void, Bitmap> {
-
-        @Override
-        protected Bitmap doInBackground(String... strings) {
-            String imagen = strings[0];
-            Bitmap imgAMostrar = null;
-            try {
-                InputStream ins = new URL(imagen).openStream();
-                imgAMostrar = BitmapFactory.decodeStream(ins);
-            } catch (MalformedURLException badURLe) {
-                Log.e("REST API", "La URL que ha sido dada está mal formada.");
-                badURLe.printStackTrace();
-            } catch (IOException ioe) {
-                Log.e("REST API", "Hubo un error al descargar " + imagen);
-                ioe.printStackTrace();
-            }
-            return imgAMostrar;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            bmp = bitmap;
-        }
     }
 
 }

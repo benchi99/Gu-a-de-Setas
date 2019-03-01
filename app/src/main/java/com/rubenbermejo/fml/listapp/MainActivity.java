@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -28,6 +30,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 
@@ -71,9 +76,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, contenidoInformacion.class);
                 ObjetoSetas seta = adaptador.getListSetas().get(lista.getChildAdapterPosition(v));
 
-                Bundle informacion = new Bundle();
-                informacion.putSerializable("seta", seta);
-                intent.putExtras(informacion);
+                intent.putExtra("setaId", seta.getId());
 
                 startActivityForResult(intent, 2);
             }
@@ -211,6 +214,21 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject JSONobj = jsonArray.getJSONObject(i);
 
                     seta = new ObjetoSetas(JSONobj.getString("NOMBRE"), JSONobj.getString("DESCRIPCION"), JSONobj.getString("NOMBRE_COMUN"), JSONobj.getString("URL"), Utilidades.intToBool(JSONobj.getInt("COMESTIBLE")), JSONobj.getString("IMAGEN"));
+                    String imagen = Utilidades.DIRECCION_REST_MARISMA + Utilidades.IMG_LOCATION + JSONobj.getString("IMAGEN");
+                    Bitmap imgAMostrar;
+                    try {
+                        InputStream ins = new URL(imagen).openStream();
+                        imgAMostrar = BitmapFactory.decodeStream(ins);
+                    } catch (MalformedURLException badURLe) {
+                        Log.e("REST API - IMAGEN", "La URL que ha sido dada está mal formada.");
+                        imgAMostrar = null;
+                        badURLe.printStackTrace();
+                    } catch (IOException ioe) {
+                        Log.e("REST API - IMAGEN", "Hubo un error al descargar " + imagen);
+                        imgAMostrar = null;
+                        ioe.printStackTrace();
+                    }
+                    seta.setImg(imgAMostrar);
                     seta.setId(JSONobj.getInt("ID"));
                     seta.setFavorito(Utilidades.intToBool(JSONobj.getInt("FAVORITO")));
 

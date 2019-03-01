@@ -26,49 +26,6 @@ public class RESTasks {
     ArrayList<ObjetoSetas> listaActual;
     ObjetoSetas setaDevolver;
 
-
-
-    /**
-     * Obtiene una seta del servicio REST ubicado
-     * en dam2.ieslamarisma.net/2019/rubenbermejo
-     * según identificador especificado.
-     *
-     */
-
-    private class ObtenSeta extends AsyncTask<Integer, Integer, ObjetoSetas>{
-        @Override
-        protected ObjetoSetas doInBackground(Integer... integers) {
-            HttpGet getSeta = new HttpGet(Utilidades.DIRECCION_REST_MARISMA + Utilidades.GET_PUT_DELETE_ID + String.valueOf(integers[0]));
-            getSeta.setHeader("content-type", "application-json");
-
-            try {
-                HttpResponse respuesta = httpClient.execute(getSeta);
-                String strResp = EntityUtils.toString(respuesta.getEntity());
-
-                JSONObject json = new JSONObject(strResp);
-                ObjetoSetas seta = new ObjetoSetas(json.getString("NOMBRE"), json.getString("DESCRIPCION"), json.getString("NOMBRE_COMUN"), json.getString("URL"), Utilidades.intToBool(json.getInt("COMESTIBLE")), Utilidades.IMG_LOCATION + json.getString("IMAGEN"));
-                seta.setId(json.getInt("ID"));
-                seta.setFavorito(Utilidades.intToBool(json.getInt("FAVORITO")));
-
-                return seta;
-            } catch (IOException ioe) {
-                Log.e("REST API", "Error al realizar peticion GET " + Utilidades.DIRECCION_REST_MARISMA + Utilidades.GET_PUT_DELETE_ID + String.valueOf(integers[0]) + ".");
-                ioe.printStackTrace();
-                return null;
-            } catch (JSONException jsone) {
-                Log.e("REST API", "Error a la hora de leer JSON.");
-                jsone.printStackTrace();
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(ObjetoSetas objetoSetas) {
-            super.onPostExecute(objetoSetas);
-            setaDevolver = objetoSetas;
-        }
-    }
-
     /**
      * Inserta una Seta en el servicio REST ubicado
      * en dam2.ieslamarisma.net/2019/rubenbermejo
@@ -119,27 +76,7 @@ public class RESTasks {
      * dam2.ieslamarisma.net/2019/rubenbermejo
      *
      */
-    private class EliminarSeta extends AsyncTask<Integer, Integer, Boolean> {
-        @Override
-        protected Boolean doInBackground(Integer... integers) {
-            HttpDelete del = new HttpDelete(Utilidades.DIRECCION_REST_MARISMA + Utilidades.GET_PUT_DELETE_ID + String.valueOf(integers[0]));
 
-            del.setHeader("content-type", "application/json");
-
-            try {
-                HttpResponse respuesta = httpClient.execute(del);
-                String respStr = EntityUtils.toString(respuesta.getEntity());
-
-                if (!respStr.equals("true")){
-                    return false;
-                }
-            } catch (IOException ioe) {
-                Log.e("REST API", "Error al realizar petición DELETE! " + ioe.getMessage());
-                return false;
-            }
-            return true;
-        }
-    }
 
     /**
      * Actualiza una seta en el servicio REST ubicado en
@@ -182,28 +119,6 @@ public class RESTasks {
         }
     }
 
-
-
-    public ObjetoSetas obtenerSeta(int id) {
-        ObtenSeta obSeta = new ObtenSeta();
-        obSeta.execute(id);
-        return setaDevolver;
-    }
-
-    public void insertarSeta(ObjetoSetas seta){
-        InsertarSeta ins = new InsertarSeta();
-        ins.execute(seta);
-    }
-
-    public void modificarSeta(ObjetoSetas seta){
-        ActualizarSeta upd = new ActualizarSeta();
-        upd.execute(seta);
-    }
-
-    public void eliminarSeta(int id){
-        EliminarSeta del = new EliminarSeta();
-        del.execute(id);
-    }
 }
 
 
