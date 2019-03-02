@@ -26,11 +26,12 @@ public class Utilidades {
     final public static String ID_COLUMNA = "id";
     final public static String FAV_COLUMNA = "favorito";
     final public static String IMG_COLUMNA = "imagen";
-    final public static String DIRECCION_REST_LOCAL = "http://localhost/ServicioREST";
-    final public static String DIRECCION_REST_DATAUS = "http://datauschwitz-se/practicasRuben/ServicioREST";
-    final public static String DIRECCION_REST_MARISMA = "http://dam2.ieslamarisma.net/2019/rubenbermejo";
+    final public static String DIRECCION_REST_LOCAL = "https://localhost/ServicioREST";
+    final public static String DIRECCION_REST_DATAUS = "https://datauschwitz-se/practicasRuben/ServicioREST";
+    final public static String DIRECCION_REST_MARISMA = "https://dam2.ieslamarisma.net/2019/rubenbermejo";
     final public static String POST_GET_ALL = "/setas";
     final public static String GET_FAV = "/setas/favoritos";
+    final public static String PUT_FAV = "/setas/favorito/";
     final public static String GET_PUT_DELETE_ID = "/setas/";
     final public static String IMG_LOCATION = "/img/";
 

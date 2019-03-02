@@ -70,55 +70,6 @@ public class RESTasks {
             return true;
         }
     }
-
-    /**
-     * Elimina una seta en el servicio REST ubicado en
-     * dam2.ieslamarisma.net/2019/rubenbermejo
-     *
-     */
-
-
-    /**
-     * Actualiza una seta en el servicio REST ubicado en
-     * dam2.ieslamarisma.net/2019/rubenbermejo
-     */
-    private class ActualizarSeta extends AsyncTask<ObjetoSetas, Integer, Boolean> {
-        @Override
-        protected Boolean doInBackground(ObjetoSetas... objetoSetas) {
-            HttpPut put = new HttpPut(Utilidades.DIRECCION_REST_MARISMA + Utilidades.GET_PUT_DELETE_ID + String.valueOf(objetoSetas[0].getId()));
-            put.setHeader("content-type", "application/json");
-
-            try {
-                JSONObject setaActualizar = new JSONObject();
-                setaActualizar.put("nombre", objetoSetas[0].getNombre());
-                setaActualizar.put("descripcion", objetoSetas[0].getDescripcion());
-                setaActualizar.put("nombre_comun", objetoSetas[0].getnombreComun());
-                setaActualizar.put("comestible", Utilidades.boolToInt(objetoSetas[0].getComestible()));
-                setaActualizar.put("favorito", Utilidades.boolToInt(objetoSetas[0].getFavorito()));
-                if (objetoSetas[0].getURLlinea() != null) {
-                    setaActualizar.put("URL", objetoSetas[0].getURLlinea());
-                }
-                setaActualizar.put("imagen", objetoSetas[0].getImagen());
-
-                StringEntity ent = new StringEntity(setaActualizar.toString());
-                put.setEntity(ent);
-
-                HttpResponse resp = httpClient.execute(put);
-                String respStr = EntityUtils.toString(resp.getEntity());
-
-                if (!respStr.equals("true")){
-                    return false;
-                }
-            } catch (IOException ioe) {
-                return false;
-            } catch (JSONException jsone) {
-                return false;
-            }
-
-            return true;
-        }
-    }
-
 }
 
 

@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.MenuRes;
+import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,10 +27,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,6 +44,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class contenidoInformacion extends AppCompatActivity {
 
@@ -88,7 +96,7 @@ public class contenidoInformacion extends AppCompatActivity {
 
         switch (id) {
             case R.id.togglerFav:       //Pone o quita los favoritos.
-                //PUT
+                new ToggleFav().execute(setaId);
                 break;
             case R.id.share:
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -136,6 +144,13 @@ public class contenidoInformacion extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK){
+            new ObtenSeta().execute(setaId);
+        }
     }
 
     /**
@@ -230,6 +245,12 @@ public class contenidoInformacion extends AppCompatActivity {
         }
     }
 
+    /**
+     * Elimina una seta en el servicio REST ubicado en
+     * dam2.ieslamarisma.net/2019/rubenbermejo
+     *
+     */
+
     private class EliminarSeta extends AsyncTask<Integer, Integer, Boolean> {
         @Override
         protected Boolean doInBackground(Integer... integers) {
@@ -249,6 +270,56 @@ public class contenidoInformacion extends AppCompatActivity {
                 return false;
             }
             return true;
+        }
+    }
+
+    private class ToggleFav extends AsyncTask<Integer, Integer, Boolean> {
+        @Override
+        protected Boolean doInBackground(Integer... integers) {
+            HttpPut put = new HttpPut(Utilidades.DIRECCION_REST_MARISMA + Utilidades.PUT_FAV + String.valueOf(integers[0]));
+            put.setHeader("content-type", "application/json");
+
+            try {
+                /*
+                List<NameValuePair> params = new ArrayList<>();
+                params.add(new BasicNameValuePair("favorito", String.valueOf(Utilidades.boolToInt(!setaRecibida.getFavorito()))));
+                put.setEntity(new UrlEncodedFormEntity(params));
+
+                HttpResponse resp = httpClient.execute(put);
+                String respStr = EntityUtils.toString(resp.getEntity());
+
+                if (!respStr.equals("true")) {
+                    return false;
+                }
+                */
+                JSONObject setaActualizar = new JSONObject();
+                setaActualizar.put("favorito", String.valueOf(Utilidades.boolToInt(!setaRecibida.getFavorito())));
+                setaRecibida.setFavorito(!setaRecibida.getFavorito());
+
+                StringEntity ent = new StringEntity(setaActualizar.toString());
+                put.setEntity(ent);
+
+                HttpResponse resp = httpClient.execute(put);
+                String respStr = EntityUtils.toString(resp.getEntity());
+
+                if (!respStr.equals("true")) {
+                    return false;
+                }
+            } catch (IOException ioe) {
+                return false;
+            } catch (JSONException jsone){
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            if (setaRecibida.getFavorito()) {
+                Toast.makeText(contenidoInformacion.this, "Se ha añadido a favoritos.", Toast.LENGTH_SHORT).show();
+            } else if (!setaRecibida.getFavorito()) {
+                Toast.makeText(contenidoInformacion.this, "Se ha quitado de favoritos.", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }
