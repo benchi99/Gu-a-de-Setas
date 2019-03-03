@@ -140,12 +140,14 @@ public class nuevaSeta extends AppCompatActivity {
                 setaAInsertar.put("nombre", objetoSetas[0].getNombre());
                 setaAInsertar.put("descripcion", objetoSetas[0].getDescripcion());
                 setaAInsertar.put("nombre_comun", objetoSetas[0].getnombreComun());
-                setaAInsertar.put("comestible", Utilidades.boolToInt(objetoSetas[0].getComestible()));
-                setaAInsertar.put("favorito", Utilidades.boolToInt(objetoSetas[0].getFavorito()));
+                setaAInsertar.put("comestible", String.valueOf(Utilidades.boolToInt(objetoSetas[0].getComestible())));
+                setaAInsertar.put("favorito", String.valueOf(Utilidades.boolToInt(objetoSetas[0].getFavorito())));
                 if (objetoSetas[0].getURLlinea() != null) {
                     setaAInsertar.put("URL", objetoSetas[0].getURLlinea());
                 }
                 setaAInsertar.put("imagen", objetoSetas[0].getImagen());
+
+                System.out.println(setaAInsertar.toString());
 
                 StringEntity ent = new StringEntity(setaAInsertar.toString());
                 postSeta.setEntity(ent);

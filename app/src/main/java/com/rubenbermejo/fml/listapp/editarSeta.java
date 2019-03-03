@@ -160,6 +160,8 @@ public class editarSeta extends AppCompatActivity {
                 }
                 setaActualizar.put("imagen", objetoSetas[0].getImagen());
 
+                System.out.println(setaActualizar.toString());
+
                 StringEntity ent = new StringEntity(setaActualizar.toString());
                 put.setEntity(ent);
 
