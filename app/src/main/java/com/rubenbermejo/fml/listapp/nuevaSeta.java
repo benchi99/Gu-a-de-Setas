@@ -9,10 +9,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,11 +25,23 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
 public class nuevaSeta extends AppCompatActivity {
 
     ImageView imgvw;
     EditText etNombre, etNombreComun, etDescripcion;
     Switch edibleSwitch;
+    HttpClient httpClient = new DefaultHttpClient();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,5 +121,50 @@ public class nuevaSeta extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
 
         actionBar.setTitle(R.string.anadirSeta);
+    }
+
+    /**
+     * Inserta una Seta en el servicio REST ubicado
+     * en dam2.ieslamarisma.net/2019/rubenbermejo
+     *
+     */
+    private class InsertarSeta extends AsyncTask<ObjetoSetas, Integer, Boolean> {
+        @Override
+        protected Boolean doInBackground(ObjetoSetas... objetoSetas) {
+            HttpPost postSeta = new HttpPost(Utilidades.DIRECCION_REST_MARISMA + Utilidades.POST_GET_ALL);
+            postSeta.setHeader("content-type", "application/json");
+
+            try {
+                JSONObject setaAInsertar = new JSONObject();
+
+                setaAInsertar.put("nombre", objetoSetas[0].getNombre());
+                setaAInsertar.put("descripcion", objetoSetas[0].getDescripcion());
+                setaAInsertar.put("nombre_comun", objetoSetas[0].getnombreComun());
+                setaAInsertar.put("comestible", Utilidades.boolToInt(objetoSetas[0].getComestible()));
+                setaAInsertar.put("favorito", Utilidades.boolToInt(objetoSetas[0].getFavorito()));
+                if (objetoSetas[0].getURLlinea() != null) {
+                    setaAInsertar.put("URL", objetoSetas[0].getURLlinea());
+                }
+                setaAInsertar.put("imagen", objetoSetas[0].getImagen());
+
+                StringEntity ent = new StringEntity(setaAInsertar.toString());
+                postSeta.setEntity(ent);
+
+                HttpResponse respuesta = httpClient.execute(postSeta);
+                String respStr = EntityUtils.toString(respuesta.getEntity());
+
+                if (!respStr.equals("true")){
+                    return false;
+                }
+            } catch (IOException ioe) {
+                Log.e("REST API", "Error al realizar método POST! " + ioe.getMessage());
+                return false;
+            } catch (JSONException jsone) {
+                Log.e("REST API", "Error al formar JSON. " + jsone.getMessage());
+                return false;
+            }
+
+            return true;
+        }
     }
 }

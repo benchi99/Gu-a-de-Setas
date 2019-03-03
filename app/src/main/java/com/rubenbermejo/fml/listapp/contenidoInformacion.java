@@ -138,6 +138,7 @@ public class contenidoInformacion extends AppCompatActivity {
                 break;
             case R.id.modSeta:
                 Intent modificar = new Intent(contenidoInformacion.this, editarSeta.class);
+                setaRecibida.setImg(null);
                 modificar.putExtra("setaMod", setaRecibida);
                 startActivityForResult(modificar, 1);
 
@@ -148,7 +149,9 @@ public class contenidoInformacion extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        // TODO Arreglar null al volver de editar.
         if (requestCode == 1 && resultCode == Activity.RESULT_OK){
+            System.out.println(setaId);
             new ObtenSeta().execute(setaId);
         }
     }
@@ -241,7 +244,8 @@ public class contenidoInformacion extends AppCompatActivity {
         @Override
         protected void onPostExecute(ObjetoSetas objetoSetas) {
             super.onPostExecute(objetoSetas);
-            cargaInfoEnUI(objetoSetas);
+            setaRecibida = objetoSetas;
+            cargaInfoEnUI(setaRecibida);
         }
     }
 
@@ -280,20 +284,8 @@ public class contenidoInformacion extends AppCompatActivity {
             put.setHeader("content-type", "application/json");
 
             try {
-                /*
-                List<NameValuePair> params = new ArrayList<>();
-                params.add(new BasicNameValuePair("favorito", String.valueOf(Utilidades.boolToInt(!setaRecibida.getFavorito()))));
-                put.setEntity(new UrlEncodedFormEntity(params));
-
-                HttpResponse resp = httpClient.execute(put);
-                String respStr = EntityUtils.toString(resp.getEntity());
-
-                if (!respStr.equals("true")) {
-                    return false;
-                }
-                */
                 JSONObject setaActualizar = new JSONObject();
-                setaActualizar.put("favorito", String.valueOf(Utilidades.boolToInt(!setaRecibida.getFavorito())));
+                setaActualizar.put("favorito", Utilidades.boolToInt(!setaRecibida.getFavorito()));
                 setaRecibida.setFavorito(!setaRecibida.getFavorito());
 
                 StringEntity ent = new StringEntity(setaActualizar.toString());
@@ -302,6 +294,9 @@ public class contenidoInformacion extends AppCompatActivity {
                 HttpResponse resp = httpClient.execute(put);
                 String respStr = EntityUtils.toString(resp.getEntity());
 
+                System.out.println(respStr);
+                JSONObject respJs = new JSONObject(respStr);
+                System.out.println(respJs.getString("error"));
                 if (!respStr.equals("true")) {
                     return false;
                 }

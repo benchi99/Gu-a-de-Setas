@@ -6,12 +6,14 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -31,6 +33,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class editarSeta extends AppCompatActivity {
 
@@ -38,9 +43,6 @@ public class editarSeta extends AppCompatActivity {
     EditText etNombre, etNombreComun, etDescripcion;
     Switch edibleSwitch;
     ObjetoSetas setaAModificar;
-    Bitmap img;
-    Uri imagenSeleccionada;
-    String direccionImagen;
 
     HttpClient httpClient = new DefaultHttpClient();
 
@@ -58,7 +60,7 @@ public class editarSeta extends AppCompatActivity {
         Intent info = getIntent();
         setaAModificar = (ObjetoSetas) info.getSerializableExtra("setaMod");
 
-        imgvw.setImageBitmap(setaAModificar.getImg());
+        new BajarImagen().execute(setaAModificar.getImagen());
         etNombre.setText(setaAModificar.getNombre());
         etNombreComun.setText(setaAModificar.getnombreComun());
         etDescripcion.setText(setaAModificar.getDescripcion());
@@ -99,7 +101,7 @@ public class editarSeta extends AppCompatActivity {
 
         switch(id){
             case R.id.aceptarModifSeta:
-                new ActualizarSeta().execute(new ObjetoSetas(etNombre.getText().toString(), etDescripcion.getText().toString(), etNombreComun.getText().toString(), setaAModificar.getURLlinea(), edibleSwitch.isChecked(), obtenNombreArchivoImagen(imagenSeleccionada)));
+                new ActualizarSeta().execute(new ObjetoSetas(etNombre.getText().toString(), etDescripcion.getText().toString(), etNombreComun.getText().toString(), setaAModificar.getURLlinea(), edibleSwitch.isChecked(), "dano256px.png"));
                 setResult(Activity.RESULT_OK);
                 finish();
                 break;
@@ -119,11 +121,7 @@ public class editarSeta extends AppCompatActivity {
         return true;
     }
 
-    private String obtenNombreArchivoImagen(Uri uri){
-        // TODO Obtener direccion y nombre de la imagen seleccionada del telefono.
-        return null;
-    }
-
+    // TODO PROBAR
     /**
      * Actualiza una seta en el servicio REST ubicado en
      * dam2.ieslamarisma.net/2019/rubenbermejo
@@ -162,6 +160,34 @@ public class editarSeta extends AppCompatActivity {
             }
 
             return true;
+        }
+    }
+
+    private class BajarImagen extends AsyncTask<String, Integer, Bitmap> {
+        @Override
+        protected Bitmap doInBackground(String... strings) {
+            String imagen = Utilidades.DIRECCION_REST_MARISMA + strings[0];
+            System.out.println(imagen);
+            Bitmap imgAMostrar;
+            try {
+                InputStream ins = (InputStream) new URL(imagen).getContent();
+                imgAMostrar = BitmapFactory.decodeStream(ins);
+                ins.close();
+            } catch (MalformedURLException badURLe) {
+                Log.e("REST API - IMAGEN", "La URL que ha sido dada está mal formada.");
+                imgAMostrar = null;
+                badURLe.printStackTrace();
+            } catch (IOException ioe) {
+                Log.e("REST API - IMAGEN", "Hubo un error al descargar " + imagen);
+                imgAMostrar = null;
+                ioe.printStackTrace();
+            }
+            return imgAMostrar;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            imgvw.setImageBitmap(bitmap);
         }
     }
 
