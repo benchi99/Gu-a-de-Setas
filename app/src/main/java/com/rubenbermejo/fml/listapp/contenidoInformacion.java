@@ -150,8 +150,9 @@ public class contenidoInformacion extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         // TODO Arreglar null al volver de editar.
-        if (requestCode == 1 && resultCode == Activity.RESULT_OK){
-            System.out.println(setaId);
+
+        if (requestCode == 1 && (resultCode == Activity.RESULT_OK || resultCode == Activity.RESULT_CANCELED || resultCode == Activity.RESULT_FIRST_USER)){
+            System.out.println(data.getIntExtra("id", 0));
             new ObtenSeta().execute(setaId);
         }
     }

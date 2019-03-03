@@ -91,7 +91,7 @@ public class nuevaSeta extends AppCompatActivity {
         switch (id) {
 
             case R.id.aceptarCrearSeta:
-                //POST
+                new InsertarSeta().execute(new ObjetoSetas(etNombre.getText().toString(), etDescripcion.getText().toString(), etNombreComun.getText().toString(), null, edibleSwitch.isEnabled(), "dano256px.png"));
                 setResult(Activity.RESULT_OK);
                 finish();
                 break;
@@ -152,6 +152,8 @@ public class nuevaSeta extends AppCompatActivity {
 
                 HttpResponse respuesta = httpClient.execute(postSeta);
                 String respStr = EntityUtils.toString(respuesta.getEntity());
+
+                System.out.println(respStr);
 
                 if (!respStr.equals("true")){
                     return false;

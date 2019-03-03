@@ -29,4 +29,5 @@
     <string name="delElementDescr">Are you sure you want to remove this shroom from your list?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="load">Loading...</string>
 </resources>

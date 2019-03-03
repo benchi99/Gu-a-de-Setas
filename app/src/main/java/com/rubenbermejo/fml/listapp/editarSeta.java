@@ -81,6 +81,15 @@ public class editarSeta extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        Intent intentDevolver = new Intent();
+        System.out.println(setaAModificar.getId());
+        intentDevolver.putExtra("id", setaAModificar.getId());
+        setResult(Activity.RESULT_OK, intentDevolver);
+        finish();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -97,12 +106,19 @@ public class editarSeta extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+        String img;
         int id = item.getItemId();
 
         switch(id){
             case R.id.aceptarModifSeta:
-                new ActualizarSeta().execute(new ObjetoSetas(etNombre.getText().toString(), etDescripcion.getText().toString(), etNombreComun.getText().toString(), setaAModificar.getURLlinea(), edibleSwitch.isChecked(), "dano256px.png"));
-                setResult(Activity.RESULT_OK);
+                if (setaAModificar.getImagen() == null)
+                    img = "dano256px.png";
+                else
+                    img = setaAModificar.getImagen();
+                new ActualizarSeta().execute(new ObjetoSetas(etNombre.getText().toString(), etDescripcion.getText().toString(), etNombreComun.getText().toString(), setaAModificar.getURLlinea(), edibleSwitch.isChecked(), img));
+                Intent intentDevolver = new Intent();
+                intentDevolver.putExtra("id", setaAModificar.getId());
+                setResult(Activity.RESULT_OK, intentDevolver);
                 finish();
                 break;
             case R.id.cancelarModifSeta:
@@ -129,7 +145,7 @@ public class editarSeta extends AppCompatActivity {
     private class ActualizarSeta extends AsyncTask<ObjetoSetas, Integer, Boolean> {
         @Override
         protected Boolean doInBackground(ObjetoSetas... objetoSetas) {
-            HttpPut put = new HttpPut(Utilidades.DIRECCION_REST_MARISMA + Utilidades.GET_PUT_DELETE_ID + String.valueOf(objetoSetas[0].getId()));
+            HttpPut put = new HttpPut(Utilidades.DIRECCION_REST_MARISMA + Utilidades.GET_PUT_DELETE_ID + setaAModificar.getId());
             put.setHeader("content-type", "application/json");
 
             try {
@@ -149,6 +165,8 @@ public class editarSeta extends AppCompatActivity {
 
                 HttpResponse resp = httpClient.execute(put);
                 String respStr = EntityUtils.toString(resp.getEntity());
+
+                System.out.println(respStr);
 
                 if (!respStr.equals("true")){
                     return false;

@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     AdapterData adaptador;
     ArrayList<ObjetoSetas> listaSetas = new ArrayList<>();
     SwipeRefreshLayout actualiza;
+
     boolean mostrarFavoritos = false;
 
     @Override

@@ -30,4 +30,5 @@
     <string name="delElementDescr">¿Estás seguro de que quieres eliminar esta seta de la lista?</string>
     <string name="yes">Sí</string>
     <string name="no">No</string>
+    <string name="load">Cargando...</string>
 </resources>
